@@ -24,11 +24,21 @@ struct MediaGalleryView: View {
                 .padding(.horizontal)
 
                 if mediaManager.mediaItems.isEmpty {
-                    ContentUnavailableView(
-                        "No Media",
-                        systemImage: "photo.on.rectangle.angled",
-                        description: Text("Photos and videos captured with your glasses will appear here after syncing.")
-                    )
+                    VStack(spacing: 16) {
+                        Spacer()
+                        Image(systemName: "photo.on.rectangle.angled")
+                            .font(.system(size: 56))
+                            .foregroundStyle(.secondary)
+                        Text("No Media")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                        Text("Photos and videos captured with your glasses will appear here after syncing.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                        Spacer()
+                    }
                 } else {
                     ScrollView {
                         LazyVGrid(columns: [
