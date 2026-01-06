@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(xargs ls:*)",
+      "Bash(grep:*)",
+      "Bash(git init:*)",
+      "Bash(git remote add:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nInitial commit: Ray-Ban Meta iOS companion app for fire safety\n\nFeatures:\n- Fire Hazard Analysis with Orq.ai integration (Fire_Safety deployment)\n- Chat interface with Instruction_Support_Agent deployment\n- Find Asset feature with N-XT API integration\n- Glass-style UI with custom tab bar\n- Keyboard handling for chat input\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git checkout:*)",
+      "Bash(git rebase:*)",
+      "Bash(GIT_EDITOR=true git rebase:*)"
+    ]
+  }
+}

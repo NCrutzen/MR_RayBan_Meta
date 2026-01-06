@@ -1,0 +1,515 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		33927CFF2EF955E300E6896C /* MoyneRobertsTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33927CFE2EF955E300E6896C /* MoyneRobertsTheme.swift */; };
+		33927D022EF9574600E6896C /* MWDATCamera in Frameworks */ = {isa = PBXBuildFile; productRef = 33927D012EF9574600E6896C /* MWDATCamera */; };
+		33927D042EF9574600E6896C /* MWDATCore in Frameworks */ = {isa = PBXBuildFile; productRef = 33927D032EF9574600E6896C /* MWDATCore */; };
+		33927D062EF9574600E6896C /* MWDATMockDevice in Frameworks */ = {isa = PBXBuildFile; productRef = 33927D052EF9574600E6896C /* MWDATMockDevice */; };
+		33EFE5322EFA5B580079D957 /* CameraStreamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EFE5312EFA5B580079D957 /* CameraStreamView.swift */; };
+		33EFE5352EFA6A2B0079D957 /* InspectionResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EFE5332EFA6A2B0079D957 /* InspectionResultsView.swift */; };
+		33EFE5362EFA6A2B0079D957 /* InspectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EFE5342EFA6A2B0079D957 /* InspectView.swift */; };
+		33EFE5382EFA6A3B0079D957 /* FireHazardAnalysisService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EFE5372EFA6A3B0079D957 /* FireHazardAnalysisService.swift */; };
+		33EFE53A2EFA6A4A0079D957 /* InspectionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EFE5392EFA6A4A0079D957 /* InspectionResult.swift */; };
+		33EFE53C2EFAA5180079D957 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EFE53B2EFAA5180079D957 /* ChatView.swift */; };
+		33EFE53E2EFAA5270079D957 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EFE53D2EFAA5270079D957 /* ChatService.swift */; };
+		44BATCH012EFB000000000001 /* BatchInspectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44BATCH002EFB000000000001 /* BatchInspectView.swift */; };
+		44BATCH032EFB000000000002 /* BatchInspectionResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44BATCH022EFB000000000002 /* BatchInspectionResultsView.swift */; };
+		55ASSET012EFC000000000001 /* FindAssetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ASSET002EFC000000000001 /* FindAssetView.swift */; };
+		55ASSET032EFC000000000002 /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ASSET022EFC000000000002 /* Asset.swift */; };
+		55ASSET052EFC000000000003 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ASSET042EFC000000000003 /* KeychainManager.swift */; };
+		55ASSET072EFC000000000004 /* AssetAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ASSET062EFC000000000004 /* AssetAPIService.swift */; };
+		A1B2C3D4E5F6A7B8C9D0E1F1 /* RayBanMetaCompanionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D4E5F6A7B8C9D0E1F1 /* RayBanMetaCompanionApp.swift */; };
+		A1B2C3D4E5F6A7B8C9D0E1F2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D4E5F6A7B8C9D0E1F2 /* ContentView.swift */; };
+		A1B2C3D4E5F6A7B8C9D0E1F3 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D4E5F6A7B8C9D0E1F3 /* DashboardView.swift */; };
+		A1B2C3D4E5F6A7B8C9D0E1F4 /* MediaGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D4E5F6A7B8C9D0E1F4 /* MediaGalleryView.swift */; };
+		A1B2C3D4E5F6A7B8C9D0E1F5 /* POCListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D4E5F6A7B8C9D0E1F5 /* POCListView.swift */; };
+		A1B2C3D4E5F6A7B8C9D0E1F6 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D4E5F6A7B8C9D0E1F6 /* SettingsView.swift */; };
+		A1B2C3D4E5F6A7B8C9D0E1F7 /* GlassesConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D4E5F6A7B8C9D0E1F7 /* GlassesConnectionManager.swift */; };
+		A1B2C3D4E5F6A7B8C9D0E1F8 /* MediaSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D4E5F6A7B8C9D0E1F8 /* MediaSyncManager.swift */; };
+		A1B2C3D4E5F6A7B8C9D0E1F9 /* VisionProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D4E5F6A7B8C9D0E1F9 /* VisionProcessor.swift */; };
+		A1B2C3D4E5F6A7B8C9D0E1FA /* MediaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D4E5F6A7B8C9D0E1FA /* MediaItem.swift */; };
+		A1B2C3D4E5F6A7B8C9D0E1FB /* GlassesDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D4E5F6A7B8C9D0E1FB /* GlassesDevice.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		33927CFE2EF955E300E6896C /* MoyneRobertsTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoyneRobertsTheme.swift; sourceTree = "<group>"; };
+		33EFE5312EFA5B580079D957 /* CameraStreamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraStreamView.swift; sourceTree = "<group>"; };
+		33EFE5332EFA6A2B0079D957 /* InspectionResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectionResultsView.swift; sourceTree = "<group>"; };
+		33EFE5342EFA6A2B0079D957 /* InspectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectView.swift; sourceTree = "<group>"; };
+		33EFE5372EFA6A3B0079D957 /* FireHazardAnalysisService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireHazardAnalysisService.swift; sourceTree = "<group>"; };
+		33EFE5392EFA6A4A0079D957 /* InspectionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectionResult.swift; sourceTree = "<group>"; };
+		33EFE53B2EFAA5180079D957 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		33EFE53D2EFAA5270079D957 /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
+		44BATCH002EFB000000000001 /* BatchInspectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchInspectView.swift; sourceTree = "<group>"; };
+		44BATCH022EFB000000000002 /* BatchInspectionResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchInspectionResultsView.swift; sourceTree = "<group>"; };
+		55ASSET002EFC000000000001 /* FindAssetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindAssetView.swift; sourceTree = "<group>"; };
+		55ASSET022EFC000000000002 /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
+		55ASSET042EFC000000000003 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		55ASSET062EFC000000000004 /* AssetAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetAPIService.swift; sourceTree = "<group>"; };
+		B1B2C3D4E5F6A7B8C9D0E1F1 /* RayBanMetaCompanionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RayBanMetaCompanionApp.swift; sourceTree = "<group>"; };
+		B1B2C3D4E5F6A7B8C9D0E1F2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B1B2C3D4E5F6A7B8C9D0E1F3 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		B1B2C3D4E5F6A7B8C9D0E1F4 /* MediaGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaGalleryView.swift; sourceTree = "<group>"; };
+		B1B2C3D4E5F6A7B8C9D0E1F5 /* POCListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POCListView.swift; sourceTree = "<group>"; };
+		B1B2C3D4E5F6A7B8C9D0E1F6 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		B1B2C3D4E5F6A7B8C9D0E1F7 /* GlassesConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassesConnectionManager.swift; sourceTree = "<group>"; };
+		B1B2C3D4E5F6A7B8C9D0E1F8 /* MediaSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaSyncManager.swift; sourceTree = "<group>"; };
+		B1B2C3D4E5F6A7B8C9D0E1F9 /* VisionProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionProcessor.swift; sourceTree = "<group>"; };
+		B1B2C3D4E5F6A7B8C9D0E1FA /* MediaItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaItem.swift; sourceTree = "<group>"; };
+		B1B2C3D4E5F6A7B8C9D0E1FB /* GlassesDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassesDevice.swift; sourceTree = "<group>"; };
+		C1B2C3D4E5F6A7B8C9D0E1F0 /* RayBanMetaCompanion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RayBanMetaCompanion.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D1B2C3D4E5F6A7B8C9D0E1F0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				33927D022EF9574600E6896C /* MWDATCamera in Frameworks */,
+				33927D062EF9574600E6896C /* MWDATMockDevice in Frameworks */,
+				33927D042EF9574600E6896C /* MWDATCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E1B2C3D4E5F6A7B8C9D0E1F0 = {
+			isa = PBXGroup;
+			children = (
+				E1B2C3D4E5F6A7B8C9D0E1F1 /* RayBanMetaCompanion */,
+				E1B2C3D4E5F6A7B8C9D0E1F2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E1B2C3D4E5F6A7B8C9D0E1F1 /* RayBanMetaCompanion */ = {
+			isa = PBXGroup;
+			children = (
+				E1B2C3D4E5F6A7B8C9D0E1F3 /* Sources */,
+			);
+			path = RayBanMetaCompanion;
+			sourceTree = "<group>";
+		};
+		E1B2C3D4E5F6A7B8C9D0E1F2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C1B2C3D4E5F6A7B8C9D0E1F0 /* RayBanMetaCompanion.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E1B2C3D4E5F6A7B8C9D0E1F3 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				E1B2C3D4E5F6A7B8C9D0E1F4 /* App */,
+				E1B2C3D4E5F6A7B8C9D0E1F5 /* Views */,
+				E1B2C3D4E5F6A7B8C9D0E1F6 /* Services */,
+				E1B2C3D4E5F6A7B8C9D0E1F7 /* Models */,
+				33927CFE2EF955E300E6896C /* MoyneRobertsTheme.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		E1B2C3D4E5F6A7B8C9D0E1F4 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				B1B2C3D4E5F6A7B8C9D0E1F1 /* RayBanMetaCompanionApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		E1B2C3D4E5F6A7B8C9D0E1F5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				33EFE53B2EFAA5180079D957 /* ChatView.swift */,
+				44BATCH002EFB000000000001 /* BatchInspectView.swift */,
+				44BATCH022EFB000000000002 /* BatchInspectionResultsView.swift */,
+				33EFE5332EFA6A2B0079D957 /* InspectionResultsView.swift */,
+				33EFE5342EFA6A2B0079D957 /* InspectView.swift */,
+				33EFE5312EFA5B580079D957 /* CameraStreamView.swift */,
+				B1B2C3D4E5F6A7B8C9D0E1F2 /* ContentView.swift */,
+				B1B2C3D4E5F6A7B8C9D0E1F3 /* DashboardView.swift */,
+				55ASSET002EFC000000000001 /* FindAssetView.swift */,
+				B1B2C3D4E5F6A7B8C9D0E1F4 /* MediaGalleryView.swift */,
+				B1B2C3D4E5F6A7B8C9D0E1F5 /* POCListView.swift */,
+				B1B2C3D4E5F6A7B8C9D0E1F6 /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E1B2C3D4E5F6A7B8C9D0E1F6 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				33EFE53D2EFAA5270079D957 /* ChatService.swift */,
+				55ASSET062EFC000000000004 /* AssetAPIService.swift */,
+				33EFE5372EFA6A3B0079D957 /* FireHazardAnalysisService.swift */,
+				B1B2C3D4E5F6A7B8C9D0E1F7 /* GlassesConnectionManager.swift */,
+				55ASSET042EFC000000000003 /* KeychainManager.swift */,
+				B1B2C3D4E5F6A7B8C9D0E1F8 /* MediaSyncManager.swift */,
+				B1B2C3D4E5F6A7B8C9D0E1F9 /* VisionProcessor.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		E1B2C3D4E5F6A7B8C9D0E1F7 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				55ASSET022EFC000000000002 /* Asset.swift */,
+				B1B2C3D4E5F6A7B8C9D0E1FB /* GlassesDevice.swift */,
+				33EFE5392EFA6A4A0079D957 /* InspectionResult.swift */,
+				B1B2C3D4E5F6A7B8C9D0E1FA /* MediaItem.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F1B2C3D4E5F6A7B8C9D0E1F0 /* RayBanMetaCompanion */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F1B2C3D4E5F6A7B8C9D0E1F3 /* Build configuration list for PBXNativeTarget "RayBanMetaCompanion" */;
+			buildPhases = (
+				D1B2C3D4E5F6A7B8C9D0E1F1 /* Sources */,
+				D1B2C3D4E5F6A7B8C9D0E1F0 /* Frameworks */,
+				D1B2C3D4E5F6A7B8C9D0E1F2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RayBanMetaCompanion;
+			productName = RayBanMetaCompanion;
+			productReference = C1B2C3D4E5F6A7B8C9D0E1F0 /* RayBanMetaCompanion.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E1B2C3D4E5F6A7B8C9D0E1F8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 2620;
+				TargetAttributes = {
+					F1B2C3D4E5F6A7B8C9D0E1F0 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = F1B2C3D4E5F6A7B8C9D0E1F1 /* Build configuration list for PBXProject "RayBanMetaCompanion" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E1B2C3D4E5F6A7B8C9D0E1F0;
+			packageReferences = (
+				33927D002EF9574600E6896C /* XCRemoteSwiftPackageReference "meta-wearables-dat-ios" */,
+			);
+			productRefGroup = E1B2C3D4E5F6A7B8C9D0E1F2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F1B2C3D4E5F6A7B8C9D0E1F0 /* RayBanMetaCompanion */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D1B2C3D4E5F6A7B8C9D0E1F2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D1B2C3D4E5F6A7B8C9D0E1F1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B2C3D4E5F6A7B8C9D0E1F1 /* RayBanMetaCompanionApp.swift in Sources */,
+				33EFE5322EFA5B580079D957 /* CameraStreamView.swift in Sources */,
+				44BATCH012EFB000000000001 /* BatchInspectView.swift in Sources */,
+				44BATCH032EFB000000000002 /* BatchInspectionResultsView.swift in Sources */,
+				33EFE53C2EFAA5180079D957 /* ChatView.swift in Sources */,
+				A1B2C3D4E5F6A7B8C9D0E1F2 /* ContentView.swift in Sources */,
+				A1B2C3D4E5F6A7B8C9D0E1F3 /* DashboardView.swift in Sources */,
+				A1B2C3D4E5F6A7B8C9D0E1F4 /* MediaGalleryView.swift in Sources */,
+				33EFE53E2EFAA5270079D957 /* ChatService.swift in Sources */,
+				A1B2C3D4E5F6A7B8C9D0E1F5 /* POCListView.swift in Sources */,
+				A1B2C3D4E5F6A7B8C9D0E1F6 /* SettingsView.swift in Sources */,
+				A1B2C3D4E5F6A7B8C9D0E1F7 /* GlassesConnectionManager.swift in Sources */,
+				A1B2C3D4E5F6A7B8C9D0E1F8 /* MediaSyncManager.swift in Sources */,
+				A1B2C3D4E5F6A7B8C9D0E1F9 /* VisionProcessor.swift in Sources */,
+				33EFE5352EFA6A2B0079D957 /* InspectionResultsView.swift in Sources */,
+				33EFE53A2EFA6A4A0079D957 /* InspectionResult.swift in Sources */,
+				33EFE5362EFA6A2B0079D957 /* InspectView.swift in Sources */,
+				A1B2C3D4E5F6A7B8C9D0E1FA /* MediaItem.swift in Sources */,
+				33927CFF2EF955E300E6896C /* MoyneRobertsTheme.swift in Sources */,
+				A1B2C3D4E5F6A7B8C9D0E1FB /* GlassesDevice.swift in Sources */,
+				33EFE5382EFA6A3B0079D957 /* FireHazardAnalysisService.swift in Sources */,
+				55ASSET012EFC000000000001 /* FindAssetView.swift in Sources */,
+				55ASSET032EFC000000000002 /* Asset.swift in Sources */,
+				55ASSET052EFC000000000003 /* KeychainManager.swift in Sources */,
+				55ASSET072EFC000000000004 /* AssetAPIService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		F1B2C3D4E5F6A7B8C9D0E1F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ANTHROPIC_API_KEY = "";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 9794362J58;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		F1B2C3D4E5F6A7B8C9D0E1F5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ANTHROPIC_API_KEY = "";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 9794362J58;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F1B2C3D4E5F6A7B8C9D0E1F6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ANTHROPIC_API_KEY = "";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "RayBan Meta";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app uses Bluetooth to connect to your Ray-Ban Meta glasses.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app accesses your photo library to display media captured by your Ray-Ban Meta glasses.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.moyenroberts.raybanmeta.companion;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F1B2C3D4E5F6A7B8C9D0E1F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ANTHROPIC_API_KEY = "";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "RayBan Meta";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "This app uses Bluetooth to connect to your Ray-Ban Meta glasses.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app accesses your photo library to display media captured by your Ray-Ban Meta glasses.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.moyenroberts.raybanmeta.companion;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F1B2C3D4E5F6A7B8C9D0E1F1 /* Build configuration list for PBXProject "RayBanMetaCompanion" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1B2C3D4E5F6A7B8C9D0E1F4 /* Debug */,
+				F1B2C3D4E5F6A7B8C9D0E1F5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F1B2C3D4E5F6A7B8C9D0E1F3 /* Build configuration list for PBXNativeTarget "RayBanMetaCompanion" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1B2C3D4E5F6A7B8C9D0E1F6 /* Debug */,
+				F1B2C3D4E5F6A7B8C9D0E1F7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		33927D002EF9574600E6896C /* XCRemoteSwiftPackageReference "meta-wearables-dat-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/facebook/meta-wearables-dat-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		33927D012EF9574600E6896C /* MWDATCamera */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 33927D002EF9574600E6896C /* XCRemoteSwiftPackageReference "meta-wearables-dat-ios" */;
+			productName = MWDATCamera;
+		};
+		33927D032EF9574600E6896C /* MWDATCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 33927D002EF9574600E6896C /* XCRemoteSwiftPackageReference "meta-wearables-dat-ios" */;
+			productName = MWDATCore;
+		};
+		33927D052EF9574600E6896C /* MWDATMockDevice */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 33927D002EF9574600E6896C /* XCRemoteSwiftPackageReference "meta-wearables-dat-ios" */;
+			productName = MWDATMockDevice;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = E1B2C3D4E5F6A7B8C9D0E1F8 /* Project object */;
+}
