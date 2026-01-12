@@ -14,8 +14,8 @@
 //
 
 import MWDATCore
-import PhotosUI
 import SwiftUI
+import UIKit
 
 struct NonStreamView: View {
   @ObservedObject var viewModel: StreamSessionViewModel
@@ -148,19 +148,13 @@ struct NonStreamView: View {
       }
     }
     // Photo Picker Sheet
-    .sheet(isPresented: $showPhotoPicker) {
-      NonStreamPhotoPickerView(
-        onImageSelected: { image in
-          selectedPhoto = image
-          showPhotoPicker = false
-          DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            showPhotoPreview = true
-          }
-        },
-        onDismiss: {
-          showPhotoPicker = false
-        }
-      )
+    .sheet(isPresented: $showPhotoPicker, onDismiss: {
+      // Show preview after picker dismissed if we have a photo
+      if selectedPhoto != nil {
+        showPhotoPreview = true
+      }
+    }) {
+      ImagePicker(selectedImage: $selectedPhoto, isPresented: $showPhotoPicker)
     }
     // Photo Preview Sheet
     .fullScreenCover(isPresented: $showPhotoPreview) {
@@ -201,57 +195,41 @@ struct NonStreamView: View {
   }
 }
 
-// MARK: - Photo Picker for NonStreamView
+// MARK: - Simple Image Picker using UIImagePickerController
 
-struct NonStreamPhotoPickerView: UIViewControllerRepresentable {
-  let onImageSelected: (UIImage) -> Void
-  let onDismiss: () -> Void
+struct ImagePicker: UIViewControllerRepresentable {
+  @Binding var selectedImage: UIImage?
+  @Binding var isPresented: Bool
 
-  func makeUIViewController(context: Context) -> PHPickerViewController {
-    var config = PHPickerConfiguration()
-    config.filter = .images
-    config.selectionLimit = 1
-
-    let picker = PHPickerViewController(configuration: config)
+  func makeUIViewController(context: Context) -> UIImagePickerController {
+    let picker = UIImagePickerController()
+    picker.sourceType = .photoLibrary
     picker.delegate = context.coordinator
     return picker
   }
 
-  func updateUIViewController(_ uiViewController: PHPickerViewController, context: Context) {}
+  func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
 
   func makeCoordinator() -> Coordinator {
     Coordinator(self)
   }
 
-  class Coordinator: NSObject, PHPickerViewControllerDelegate {
-    let parent: NonStreamPhotoPickerView
+  class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    let parent: ImagePicker
 
-    init(_ parent: NonStreamPhotoPickerView) {
+    init(_ parent: ImagePicker) {
       self.parent = parent
     }
 
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-      // Check if user selected an image
-      guard let provider = results.first?.itemProvider,
-            provider.canLoadObject(ofClass: UIImage.self) else {
-        // User cancelled - dismiss the sheet
-        DispatchQueue.main.async {
-          self.parent.onDismiss()
-        }
-        return
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+      if let image = info[.originalImage] as? UIImage {
+        parent.selectedImage = image
       }
+      parent.isPresented = false
+    }
 
-      // Load the selected image
-      provider.loadObject(ofClass: UIImage.self) { image, error in
-        DispatchQueue.main.async {
-          if let uiImage = image as? UIImage {
-            self.parent.onImageSelected(uiImage)
-          } else {
-            // Failed to load - dismiss
-            self.parent.onDismiss()
-          }
-        }
-      }
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+      parent.isPresented = false
     }
   }
 }
