@@ -35,8 +35,8 @@ class FireHazardAnalysisService: ObservableObject {
     @Published var errorMessage: String?
 
     private var apiKey: String
-    private var deploymentId: String
-    private let baseURL = "https://api.orq.ai/v2/deployments"
+    private var deploymentKey: String
+    private let baseURL = "https://my.orq.ai/v2/deployments/invoke"
 
     init() {
         // Load API key from environment or Info.plist
@@ -53,27 +53,27 @@ class FireHazardAnalysisService: ObservableObject {
             self.apiKey = ""
         }
 
-        let envDeployment = ProcessInfo.processInfo.environment["ORQ_DEPLOYMENT_ID"] ?? ""
-        let plistDeployment = Bundle.main.object(forInfoDictionaryKey: "ORQ_DEPLOYMENT_ID") as? String ?? ""
+        let envDeployment = ProcessInfo.processInfo.environment["ORQ_DEPLOYMENT_KEY"] ?? ""
+        let plistDeployment = Bundle.main.object(forInfoDictionaryKey: "ORQ_DEPLOYMENT_KEY") as? String ?? ""
 
         if !envDeployment.isEmpty {
-            self.deploymentId = envDeployment
+            self.deploymentKey = envDeployment
         } else if !plistDeployment.isEmpty && !plistDeployment.hasPrefix("$(") {
-            self.deploymentId = plistDeployment
+            self.deploymentKey = plistDeployment
         } else {
-            self.deploymentId = "fire-safety-analysis"
+            self.deploymentKey = "Fire_Safety_Analyses"
         }
 
         // Debug output
         print("🔑 Orq.ai API Key configured: \(!apiKey.isEmpty)")
-        print("📦 Orq.ai Deployment ID: \(deploymentId)")
+        print("📦 Orq.ai Deployment Key: \(deploymentKey)")
     }
 
     // Allow setting API key directly (for testing)
-    func configure(apiKey: String, deploymentId: String? = nil) {
+    func configure(apiKey: String, deploymentKey: String? = nil) {
         self.apiKey = apiKey
-        if let deployment = deploymentId {
-            self.deploymentId = deployment
+        if let deployment = deploymentKey {
+            self.deploymentKey = deployment
         }
         print("🔑 Orq.ai reconfigured - API Key set: \(!apiKey.isEmpty)")
     }
@@ -124,7 +124,7 @@ class FireHazardAnalysisService: ObservableObject {
             throw AnalysisError.missingAPIKey
         }
 
-        let url = URL(string: "\(baseURL)/\(deploymentId)/invoke")!
+        let url = URL(string: baseURL)!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
 
@@ -133,47 +133,26 @@ class FireHazardAnalysisService: ObservableObject {
         print("🔐 API Key starts with: \(keyPreview)...")
         print("🔐 API Key length: \(apiKey.count) characters")
 
-        let authHeader = "Bearer \(apiKey)"
-        request.setValue(authHeader, forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
 
+        // Orq.ai deployment invoke format
         let payload: [String: Any] = [
-            "messages": [
-                [
-                    "role": "user",
-                    "content": [
-                        [
-                            "type": "image_url",
-                            "image_url": [
-                                "url": "data:image/jpeg;base64,\(base64Image)"
-                            ]
-                        ],
-                        [
-                            "type": "text",
-                            "text": """
-                            Analyze this image for fire safety hazards. Provide your response in the following JSON format:
-                            {
-                                "risk_level": "low|medium|high|critical",
-                                "summary": "Brief summary of findings",
-                                "hazards": ["list", "of", "identified", "hazards"],
-                                "recommendations": ["list", "of", "recommendations"],
-                                "compliance": [
-                                    {"item": "Fire extinguisher present", "status": true/false},
-                                    {"item": "Emergency exits clear", "status": true/false},
-                                    {"item": "Electrical hazards", "status": true/false},
-                                    {"item": "Flammable materials stored safely", "status": true/false}
-                                ]
-                            }
-                            """
-                        ]
-                    ]
-                ]
-            ]
+            "key": deploymentKey,
+            "context": [
+                "environments": [] as [String]
+            ],
+            "inputs": [
+                "image": "data:image/jpeg;base64,\(base64Image)"
+            ],
+            "metadata": [:] as [String: Any]
         ]
 
         request.httpBody = try JSONSerialization.data(withJSONObject: payload)
 
         print("🌐 Sending request to: \(url)")
+        print("📦 Deployment key: \(deploymentKey)")
 
         let (data, response) = try await URLSession.shared.data(for: request)
 
