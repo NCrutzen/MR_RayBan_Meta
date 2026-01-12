@@ -149,11 +149,18 @@ struct NonStreamView: View {
     }
     // Photo Picker Sheet
     .sheet(isPresented: $showPhotoPicker) {
-      NonStreamPhotoPickerView { image in
-        selectedPhoto = image
-        showPhotoPicker = false
-        showPhotoPreview = true
-      }
+      NonStreamPhotoPickerView(
+        onImageSelected: { image in
+          selectedPhoto = image
+          showPhotoPicker = false
+          DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            showPhotoPreview = true
+          }
+        },
+        onDismiss: {
+          showPhotoPicker = false
+        }
+      )
     }
     // Photo Preview Sheet
     .fullScreenCover(isPresented: $showPhotoPreview) {
@@ -198,6 +205,7 @@ struct NonStreamView: View {
 
 struct NonStreamPhotoPickerView: UIViewControllerRepresentable {
   let onImageSelected: (UIImage) -> Void
+  let onDismiss: () -> Void
 
   func makeUIViewController(context: Context) -> PHPickerViewController {
     var config = PHPickerConfiguration()
@@ -223,17 +231,24 @@ struct NonStreamPhotoPickerView: UIViewControllerRepresentable {
     }
 
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-      picker.dismiss(animated: true)
-
+      // Check if user selected an image
       guard let provider = results.first?.itemProvider,
             provider.canLoadObject(ofClass: UIImage.self) else {
+        // User cancelled - dismiss the sheet
+        DispatchQueue.main.async {
+          self.parent.onDismiss()
+        }
         return
       }
 
+      // Load the selected image
       provider.loadObject(ofClass: UIImage.self) { image, error in
-        if let uiImage = image as? UIImage {
-          DispatchQueue.main.async {
+        DispatchQueue.main.async {
+          if let uiImage = image as? UIImage {
             self.parent.onImageSelected(uiImage)
+          } else {
+            // Failed to load - dismiss
+            self.parent.onDismiss()
           }
         }
       }
