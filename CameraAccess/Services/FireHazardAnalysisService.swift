@@ -127,7 +127,14 @@ class FireHazardAnalysisService: ObservableObject {
         let url = URL(string: "\(baseURL)/\(deploymentId)/invoke")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+
+        // Debug: show first 15 chars of API key
+        let keyPreview = String(apiKey.prefix(15))
+        print("🔐 API Key starts with: \(keyPreview)...")
+        print("🔐 API Key length: \(apiKey.count) characters")
+
+        let authHeader = "Bearer \(apiKey)"
+        request.setValue(authHeader, forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let payload: [String: Any] = [
