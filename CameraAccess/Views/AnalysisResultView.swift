@@ -354,20 +354,4 @@ struct AnalysisResultView: View {
     }
 }
 
-struct ShareSheet: UIViewControllerRepresentable {
-    let photo: UIImage
-
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        let activityViewController = UIActivityViewController(
-            activityItems: [photo],
-            applicationActivities: nil
-        )
-        activityViewController.excludedActivityTypes = [
-            .assignToContact,
-            .addToReadingList,
-        ]
-        return activityViewController
-    }
-
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
-}
+// ShareSheet is defined in PhotoPreviewView.swift
