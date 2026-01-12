@@ -34,23 +34,56 @@ class FireHazardAnalysisService: ObservableObject {
     @Published var analysisResult: AnalysisResult?
     @Published var errorMessage: String?
 
-    private let apiKey: String
-    private let deploymentId: String
+    private var apiKey: String
+    private var deploymentId: String
     private let baseURL = "https://api.orq.ai/v2/deployments"
 
     init() {
         // Load API key from environment or Info.plist
-        self.apiKey = ProcessInfo.processInfo.environment["ORQ_API_KEY"]
-            ?? Bundle.main.object(forInfoDictionaryKey: "ORQ_API_KEY") as? String
-            ?? ""
-        self.deploymentId = ProcessInfo.processInfo.environment["ORQ_DEPLOYMENT_ID"]
-            ?? Bundle.main.object(forInfoDictionaryKey: "ORQ_DEPLOYMENT_ID") as? String
-            ?? "fire-safety-analysis"
+        // Check environment first, then Info.plist
+        let envKey = ProcessInfo.processInfo.environment["ORQ_API_KEY"] ?? ""
+        let plistKey = Bundle.main.object(forInfoDictionaryKey: "ORQ_API_KEY") as? String ?? ""
+
+        // Use environment if available, otherwise plist (but filter out unresolved variables)
+        if !envKey.isEmpty {
+            self.apiKey = envKey
+        } else if !plistKey.isEmpty && !plistKey.hasPrefix("$(") {
+            self.apiKey = plistKey
+        } else {
+            self.apiKey = ""
+        }
+
+        let envDeployment = ProcessInfo.processInfo.environment["ORQ_DEPLOYMENT_ID"] ?? ""
+        let plistDeployment = Bundle.main.object(forInfoDictionaryKey: "ORQ_DEPLOYMENT_ID") as? String ?? ""
+
+        if !envDeployment.isEmpty {
+            self.deploymentId = envDeployment
+        } else if !plistDeployment.isEmpty && !plistDeployment.hasPrefix("$(") {
+            self.deploymentId = plistDeployment
+        } else {
+            self.deploymentId = "fire-safety-analysis"
+        }
+
+        // Debug output
+        print("🔑 Orq.ai API Key configured: \(!apiKey.isEmpty)")
+        print("📦 Orq.ai Deployment ID: \(deploymentId)")
+    }
+
+    // Allow setting API key directly (for testing)
+    func configure(apiKey: String, deploymentId: String? = nil) {
+        self.apiKey = apiKey
+        if let deployment = deploymentId {
+            self.deploymentId = deployment
+        }
+        print("🔑 Orq.ai reconfigured - API Key set: \(!apiKey.isEmpty)")
     }
 
     func analyzePhoto(_ image: UIImage) async {
         isAnalyzing = true
         errorMessage = nil
+
+        print("📸 Starting photo analysis...")
+        print("🔑 API Key present: \(!apiKey.isEmpty)")
 
         do {
             // Convert image to base64
@@ -58,9 +91,12 @@ class FireHazardAnalysisService: ObservableObject {
                 throw AnalysisError.imageConversionFailed
             }
             let base64Image = imageData.base64EncodedString()
+            print("📷 Image converted to base64 (\(base64Image.count) chars)")
 
             // Prepare the request
             let result = try await sendAnalysisRequest(base64Image: base64Image)
+            print("✅ Analysis successful!")
+
             self.analysisResult = AnalysisResult(
                 riskLevel: result.riskLevel,
                 summary: result.summary,
@@ -73,10 +109,11 @@ class FireHazardAnalysisService: ObservableObject {
                 photo: image
             )
         } catch {
+            print("❌ Analysis failed: \(error.localizedDescription)")
             self.errorMessage = error.localizedDescription
 
-            // Fallback to local analysis if API fails
-            self.analysisResult = performLocalAnalysis(image)
+            // Fallback to local analysis if API fails - but show error in summary
+            self.analysisResult = performLocalAnalysis(image, error: error.localizedDescription)
         }
 
         isAnalyzing = false
@@ -179,19 +216,21 @@ class FireHazardAnalysisService: ObservableObject {
         }
     }
 
-    private func performLocalAnalysis(_ image: UIImage) -> AnalysisResult {
+    private func performLocalAnalysis(_ image: UIImage, error: String? = nil) -> AnalysisResult {
         // Fallback local analysis when API is unavailable
+        let errorInfo = error ?? "Onbekende fout"
         return AnalysisResult(
             riskLevel: "unknown",
-            summary: "Automatische analyse niet beschikbaar. Controleer handmatig op brandveiligheid.",
-            hazards: ["Handmatige inspectie vereist"],
+            summary: "⚠️ API Fout: \(errorInfo)\n\nControleer handmatig op brandveiligheid.",
+            hazards: ["API niet beschikbaar - handmatige inspectie vereist"],
             recommendations: [
-                "Controleer op zichtbare brandgevaren",
-                "Verifieer aanwezigheid brandblusser",
-                "Controleer nooduitgangen",
-                "Inspecteer elektrische installaties"
+                "Configureer je Orq.ai API key in Info.plist",
+                "Controleer of je deployment ID correct is",
+                "Controleer je internetverbinding",
+                "Zie Xcode console voor debug info"
             ],
             complianceItems: [
+                AnalysisResult.ComplianceItem(item: "API configuratie", status: false),
                 AnalysisResult.ComplianceItem(item: "Handmatige controle vereist", status: false)
             ],
             timestamp: Date(),
