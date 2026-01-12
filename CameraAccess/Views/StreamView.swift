@@ -11,7 +11,7 @@
 //
 // Main UI for video streaming from Meta wearable devices using the DAT SDK.
 // This view demonstrates the complete streaming API: video streaming with real-time display, photo capture,
-// and error handling.
+// fire safety analysis, and error handling.
 //
 
 import MWDATCore
@@ -44,20 +44,55 @@ struct StreamView: View {
       }
 
       // Bottom controls layer
+      VStack {
+        // Moyne Roberts branding header
+        HStack {
+          VStack(alignment: .leading, spacing: 2) {
+            Text("MOYNE ROBERTS")
+              .font(.system(size: 12, weight: .bold))
+              .foregroundColor(.white.opacity(0.8))
+            Text("Brandveiligheid Inspectie")
+              .font(.system(size: 14, weight: .medium))
+              .foregroundColor(.white)
+          }
+          Spacer()
+          // Recording indicator
+          if viewModel.streamingStatus == .streaming {
+            HStack(spacing: 6) {
+              Circle()
+                .fill(Color.red)
+                .frame(width: 8, height: 8)
+              Text("LIVE")
+                .font(.system(size: 12, weight: .bold))
+                .foregroundColor(.white)
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(Color.black.opacity(0.5))
+            .cornerRadius(8)
+          }
+        }
+        .padding(.horizontal, 24)
+        .padding(.top, 60)
 
-      VStack {
         Spacer()
-        ControlsView(viewModel: viewModel)
-      }
-      .padding(.all, 24)
-      // Timer display area with fixed height
-      VStack {
-        Spacer()
+
+        // Timer display
         if viewModel.activeTimeLimit.isTimeLimited && viewModel.remainingTime > 0 {
-          Text("Streaming ending in \(viewModel.remainingTime.formattedCountdown)")
+          Text("Stream stopt over \(viewModel.remainingTime.formattedCountdown)")
             .font(.system(size: 15))
             .foregroundColor(.white)
+            .padding(.bottom, 8)
         }
+
+        ControlsView(viewModel: viewModel)
+      }
+      .padding(.horizontal, 24)
+      .padding(.bottom, 24)
+
+      // Loading overlay during analysis
+      if viewModel.isAnalyzing {
+        MRLoadingOverlay(message: "Foto wordt geanalyseerd\nop brandveiligheid...")
       }
     }
     .onDisappear {
@@ -67,13 +102,30 @@ struct StreamView: View {
         }
       }
     }
-    // Show captured photos from DAT SDK in a preview sheet
+    // Show captured photos from DAT SDK in a preview sheet with analyze option
     .sheet(isPresented: $viewModel.showPhotoPreview) {
       if let photo = viewModel.capturedPhoto {
         PhotoPreviewView(
           photo: photo,
           onDismiss: {
             viewModel.dismissPhotoPreview()
+          },
+          onAnalyze: { image in
+            viewModel.analyzePhoto(image)
+          }
+        )
+      }
+    }
+    // Show analysis results
+    .fullScreenCover(isPresented: $viewModel.showAnalysisResult) {
+      if let result = viewModel.analysisResult {
+        AnalysisResultView(
+          result: result,
+          onDismiss: {
+            viewModel.dismissAnalysisResult()
+          },
+          onNewScan: {
+            viewModel.dismissAnalysisResult()
           }
         )
       }
@@ -81,21 +133,32 @@ struct StreamView: View {
   }
 }
 
-// Extracted controls for clarity
+// Extracted controls for clarity - Moyne Roberts styled
 struct ControlsView: View {
   @ObservedObject var viewModel: StreamSessionViewModel
+
   var body: some View {
     // Controls row
-    HStack(spacing: 8) {
-      CustomButton(
-        title: "Stop streaming",
-        style: .destructive,
-        isDisabled: false
-      ) {
+    HStack(spacing: 12) {
+      // Stop button
+      Button(action: {
         Task {
           await viewModel.stopSession()
         }
+      }) {
+        HStack {
+          Image(systemName: "stop.fill")
+          Text("Stop")
+        }
+        .font(.system(size: 14, weight: .semibold))
+        .foregroundColor(.white)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 14)
+        .background(Color.mrSecondary)
+        .cornerRadius(25)
       }
+
+      Spacer()
 
       // Timer button
       CircleButton(
@@ -106,9 +169,25 @@ struct ControlsView: View {
         viewModel.setTimeLimit(nextTimeLimit)
       }
 
-      // Photo button
-      CircleButton(icon: "camera.fill", text: nil) {
+      // Photo/Analyze button - larger and more prominent
+      Button(action: {
         viewModel.capturePhoto()
+      }) {
+        ZStack {
+          Circle()
+            .fill(Color.mrPrimary)
+            .frame(width: 72, height: 72)
+          Circle()
+            .stroke(Color.white, lineWidth: 3)
+            .frame(width: 72, height: 72)
+          VStack(spacing: 2) {
+            Image(systemName: "camera.fill")
+              .font(.system(size: 24))
+            Text("Foto")
+              .font(.system(size: 10, weight: .medium))
+          }
+          .foregroundColor(.white)
+        }
       }
     }
   }

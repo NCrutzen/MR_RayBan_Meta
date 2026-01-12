@@ -9,9 +9,8 @@
 //
 // PhotoPreviewView.swift
 //
-// UI for previewing and sharing photos captured from Meta wearable devices via the DAT SDK.
-// This view displays photos captured using StreamSession.capturePhoto() and provides sharing
-// functionality.
+// UI for previewing photos captured from Meta wearable devices via the DAT SDK.
+// Includes option to analyze for fire safety hazards using Orq.ai.
 //
 
 import SwiftUI
@@ -19,64 +18,139 @@ import SwiftUI
 struct PhotoPreviewView: View {
   let photo: UIImage
   let onDismiss: () -> Void
+  let onAnalyze: ((UIImage) -> Void)?
 
   @State private var showShareSheet = false
   @State private var dragOffset = CGSize.zero
 
+  init(photo: UIImage, onDismiss: @escaping () -> Void, onAnalyze: ((UIImage) -> Void)? = nil) {
+    self.photo = photo
+    self.onDismiss = onDismiss
+    self.onAnalyze = onAnalyze
+  }
+
   var body: some View {
     ZStack {
       // Semi-transparent background overlay
-      Color.black.opacity(0.8)
+      Color.black.opacity(0.9)
         .ignoresSafeArea()
-        .onTapGesture {
-          dismissWithAnimation()
-        }
 
-      VStack(spacing: 20) {
+      VStack(spacing: 24) {
+        // Header
+        HStack {
+          Button(action: { dismissWithAnimation() }) {
+            Image(systemName: "xmark")
+              .font(.system(size: 20, weight: .semibold))
+              .foregroundColor(.white)
+              .frame(width: 44, height: 44)
+              .background(Color.white.opacity(0.2))
+              .clipShape(Circle())
+          }
+          Spacer()
+          Text("Foto Vastgelegd")
+            .font(.headline)
+            .foregroundColor(.white)
+          Spacer()
+          // Placeholder for symmetry
+          Color.clear.frame(width: 44, height: 44)
+        }
+        .padding(.horizontal)
+
+        Spacer()
+
+        // Photo display
         photoDisplayView
+
+        Spacer()
+
+        // Action buttons - Moyne Roberts styled
+        VStack(spacing: 12) {
+          // Analyze button (primary action)
+          if onAnalyze != nil {
+            Button(action: {
+              onAnalyze?(photo)
+            }) {
+              HStack {
+                Image(systemName: "flame.fill")
+                Text("Analyseer op Brandveiligheid")
+              }
+              .font(.system(size: 16, weight: .semibold))
+              .foregroundColor(.white)
+              .frame(maxWidth: .infinity)
+              .padding(.vertical, 16)
+              .background(Color.mrPrimary)
+              .cornerRadius(12)
+            }
+          }
+
+          // Secondary actions
+          HStack(spacing: 12) {
+            Button(action: { showShareSheet = true }) {
+              HStack {
+                Image(systemName: "square.and.arrow.up")
+                Text("Delen")
+              }
+              .font(.system(size: 14, weight: .medium))
+              .foregroundColor(.mrPrimary)
+              .frame(maxWidth: .infinity)
+              .padding(.vertical, 14)
+              .background(Color.white)
+              .cornerRadius(10)
+            }
+
+            Button(action: { dismissWithAnimation() }) {
+              HStack {
+                Image(systemName: "camera.fill")
+                Text("Nieuwe Foto")
+              }
+              .font(.system(size: 14, weight: .medium))
+              .foregroundColor(.white)
+              .frame(maxWidth: .infinity)
+              .padding(.vertical, 14)
+              .background(Color.white.opacity(0.2))
+              .cornerRadius(10)
+            }
+          }
+        }
+        .padding(.horizontal)
+        .padding(.bottom, 24)
       }
-      .padding()
       .offset(dragOffset)
       .animation(.spring(response: 0.6, dampingFraction: 0.8), value: dragOffset)
     }
-    .task {
-      try? await Task.sleep(nanoseconds: 100_000_000)
-      showShareSheet = true
-    }
-    .sheet(
-      isPresented: $showShareSheet,
-      onDismiss: {
-        // When share sheet is dismissed, dismiss the entire preview
-        dismissWithAnimation()
-      }
-    ) {
+    .sheet(isPresented: $showShareSheet) {
       ShareSheet(photo: photo)
     }
   }
 
   private var photoDisplayView: some View {
     GeometryReader { geometry in
-      Image(uiImage: photo)
-        .resizable()
-        .aspectRatio(contentMode: .fit)
-        .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height * 0.6)
-        .cornerRadius(12)
-        .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
-        .gesture(
-          DragGesture()
-            .onChanged { value in
-              dragOffset = value.translation
-            }
-            .onEnded { value in
-              if abs(value.translation.height) > 100 {
-                dismissWithAnimation()
-              } else {
-                withAnimation(.spring()) {
-                  dragOffset = .zero
+      VStack {
+        Spacer()
+        Image(uiImage: photo)
+          .resizable()
+          .aspectRatio(contentMode: .fit)
+          .frame(maxWidth: geometry.size.width - 32, maxHeight: geometry.size.height * 0.65)
+          .cornerRadius(16)
+          .shadow(color: .black.opacity(0.4), radius: 20, x: 0, y: 10)
+          .gesture(
+            DragGesture()
+              .onChanged { value in
+                dragOffset = value.translation
+              }
+              .onEnded { value in
+                if abs(value.translation.height) > 100 {
+                  dismissWithAnimation()
+                } else {
+                  withAnimation(.spring()) {
+                    dragOffset = .zero
+                  }
                 }
               }
-            }
-        )
+          )
+        Spacer()
+      }
+      .frame(maxWidth: .infinity)
     }
   }
 

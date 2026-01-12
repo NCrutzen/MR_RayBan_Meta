@@ -45,6 +45,12 @@ class StreamSessionViewModel: ObservableObject {
   @Published var capturedPhoto: UIImage?
   @Published var showPhotoPreview: Bool = false
 
+  // Analysis properties
+  @Published var isAnalyzing: Bool = false
+  @Published var analysisResult: AnalysisResult?
+  @Published var showAnalysisResult: Bool = false
+  let analysisService = FireHazardAnalysisService()
+
   private var timerTask: Task<Void, Never>?
   // The core DAT SDK StreamSession - handles all streaming operations
   private var streamSession: StreamSession
@@ -185,6 +191,27 @@ class StreamSessionViewModel: ObservableObject {
   func dismissPhotoPreview() {
     showPhotoPreview = false
     capturedPhoto = nil
+  }
+
+  func analyzePhoto(_ photo: UIImage) {
+    showPhotoPreview = false
+    isAnalyzing = true
+
+    Task {
+      await analysisService.analyzePhoto(photo)
+      isAnalyzing = false
+
+      if let result = analysisService.analysisResult {
+        analysisResult = result
+        showAnalysisResult = true
+      }
+    }
+  }
+
+  func dismissAnalysisResult() {
+    showAnalysisResult = false
+    analysisResult = nil
+    analysisService.clearResult()
   }
 
   private func startTimer() {

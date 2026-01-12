@@ -62,8 +62,15 @@
 		<string>com.meta.ar.wearable</string>
 	</array>
 	<!-- End required section for Device Access Toolkit Apps -->
+
+	<!-- Orq.ai API Configuration for Fire Safety Analysis -->
+	<key>ORQ_API_KEY</key>
+	<string>$(ORQ_API_KEY)</string>
+	<key>ORQ_DEPLOYMENT_ID</key>
+	<string>fire-safety-analysis</string>
+
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>This app needs access to save photos captured from your glasses.</string>
+	<string>Deze app heeft toegang nodig om foto's van je bril op te slaan.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
