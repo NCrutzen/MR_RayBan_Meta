@@ -37,7 +37,7 @@ struct HomeScreenView: View {
           Text("Moyne Roberts")
             .font(.system(size: 28, weight: .bold))
             .foregroundColor(.mrPrimary)
-          Text("Brandveiligheid Inspectie")
+          Text("Fire Safety Inspection")
             .font(.system(size: 16))
             .foregroundColor(.mrTextSecondary)
         }
@@ -55,13 +55,13 @@ struct HomeScreenView: View {
         VStack(spacing: 12) {
           HomeTipItemView(
             resource: .smartGlassesIcon,
-            title: "Slimme Bril",
-            text: "Maak foto's direct vanaf je Ray-Ban Meta bril."
+            title: "Smart Glasses",
+            text: "Take photos directly from your Ray-Ban Meta glasses."
           )
           HomeTipItemView(
             resource: .walkingIcon,
-            title: "Handsfree Inspectie",
-            text: "Loop rond en leg brandveiligheidsrisico's vast."
+            title: "Hands-free Inspection",
+            text: "Walk around and capture fire safety hazards."
           )
         }
 
@@ -73,7 +73,7 @@ struct HomeScreenView: View {
           Button(action: { showPhotoPicker = true }) {
             HStack {
               Image(systemName: "photo.on.rectangle")
-              Text("Kies Foto uit Bibliotheek")
+              Text("Choose Photo from Library")
             }
             .font(.system(size: 16, weight: .semibold))
             .foregroundColor(.white)
@@ -88,7 +88,7 @@ struct HomeScreenView: View {
             Rectangle()
               .fill(Color.mrTextSecondary.opacity(0.3))
               .frame(height: 1)
-            Text("of")
+            Text("or")
               .font(.system(size: 14))
               .foregroundColor(.mrTextSecondary)
               .padding(.horizontal, 12)
@@ -100,13 +100,13 @@ struct HomeScreenView: View {
 
           // Connect Glasses Button
           VStack(spacing: 8) {
-            Text("Verbind je Meta bril voor live opnames")
+            Text("Connect your Meta glasses for live capture")
               .font(.system(size: 14))
               .foregroundColor(.mrTextSecondary)
               .multilineTextAlignment(.center)
 
             CustomButton(
-              title: viewModel.registrationState == .registering ? "Verbinden..." : "Verbind Meta Bril",
+              title: viewModel.registrationState == .registering ? "Connecting..." : "Connect Meta Glasses",
               style: .primary,
               isDisabled: viewModel.registrationState == .registering
             ) {
@@ -120,7 +120,7 @@ struct HomeScreenView: View {
 
       // Loading overlay
       if analysisService.isAnalyzing {
-        MRLoadingOverlay(message: "Analyseren op\nbrandveiligheid...")
+        MRLoadingOverlay(message: "Analyzing for\nfire hazards...")
       }
     }
     // Photo Picker Sheet

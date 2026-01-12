@@ -10,16 +10,24 @@
 // NonStreamView.swift
 //
 // Default screen to show getting started tips after app connection
-// Initiates streaming
+// Initiates streaming and provides photo analysis option
 //
 
 import MWDATCore
+import PhotosUI
 import SwiftUI
 
 struct NonStreamView: View {
   @ObservedObject var viewModel: StreamSessionViewModel
   @ObservedObject var wearablesVM: WearablesViewModel
   @State private var sheetHeight: CGFloat = 300
+
+  // Photo analysis state
+  @StateObject private var analysisService = FireHazardAnalysisService()
+  @State private var showPhotoPicker = false
+  @State private var showPhotoPreview = false
+  @State private var showAnalysisResult = false
+  @State private var selectedPhoto: UIImage?
 
   var body: some View {
     ZStack {
@@ -50,46 +58,85 @@ struct NonStreamView: View {
             .renderingMode(.template)
             .foregroundColor(.white)
             .aspectRatio(contentMode: .fit)
-            .frame(width: 120)
+            .frame(width: 100)
 
-          Text("Stream Your Glasses Camera")
-            .font(.system(size: 20, weight: .semibold))
+          Text("Fire Safety Inspection")
+            .font(.system(size: 22, weight: .bold))
             .foregroundColor(.white)
 
-          Text("Tap the Start streaming button to stream video from your glasses or use the camera button to take a photo from your glasses.")
+          Text("Analyze photos for fire hazards using AI or stream from your glasses camera.")
             .font(.system(size: 15))
             .multilineTextAlignment(.center)
-            .foregroundColor(.white)
+            .foregroundColor(.white.opacity(0.8))
         }
         .padding(.horizontal, 12)
 
         Spacer()
 
-        HStack(spacing: 8) {
-          Image(systemName: "hourglass")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .foregroundColor(.white.opacity(0.7))
-            .frame(width: 16, height: 16)
+        // Action Buttons
+        VStack(spacing: 12) {
+          // Photo Library Button (Primary)
+          Button(action: { showPhotoPicker = true }) {
+            HStack {
+              Image(systemName: "photo.on.rectangle")
+              Text("Choose Photo from Library")
+            }
+            .font(.system(size: 16, weight: .semibold))
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 16)
+            .background(Color.mrSecondary)
+            .cornerRadius(12)
+          }
 
-          Text("Waiting for an active device")
-            .font(.system(size: 14))
-            .foregroundColor(.white.opacity(0.7))
-        }
-        .padding(.bottom, 12)
-        .opacity(viewModel.hasActiveDevice ? 0 : 1)
+          // Divider
+          HStack {
+            Rectangle()
+              .fill(Color.white.opacity(0.3))
+              .frame(height: 1)
+            Text("or")
+              .font(.system(size: 14))
+              .foregroundColor(.white.opacity(0.7))
+              .padding(.horizontal, 12)
+            Rectangle()
+              .fill(Color.white.opacity(0.3))
+              .frame(height: 1)
+          }
+          .padding(.vertical, 4)
 
-        CustomButton(
-          title: "Start streaming",
-          style: .primary,
-          isDisabled: !viewModel.hasActiveDevice
-        ) {
-          Task {
-            await viewModel.handleStartStreaming()
+          // Device status
+          if !viewModel.hasActiveDevice {
+            HStack(spacing: 8) {
+              Image(systemName: "hourglass")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .foregroundColor(.white.opacity(0.7))
+                .frame(width: 16, height: 16)
+
+              Text("Waiting for glasses connection...")
+                .font(.system(size: 14))
+                .foregroundColor(.white.opacity(0.7))
+            }
+          }
+
+          // Start Streaming Button
+          CustomButton(
+            title: "Start Streaming from Glasses",
+            style: .primary,
+            isDisabled: !viewModel.hasActiveDevice
+          ) {
+            Task {
+              await viewModel.handleStartStreaming()
+            }
           }
         }
       }
       .padding(.all, 24)
+
+      // Loading overlay
+      if analysisService.isAnalyzing {
+        MRLoadingOverlay(message: "Analyzing for\nfire hazards...")
+      }
     }
     .sheet(isPresented: $wearablesVM.showGettingStartedSheet) {
       if #available(iOS 16.0, *) {
@@ -98,6 +145,97 @@ struct NonStreamView: View {
           .presentationDragIndicator(.visible)
       } else {
         GettingStartedSheetView(height: $sheetHeight)
+      }
+    }
+    // Photo Picker Sheet
+    .sheet(isPresented: $showPhotoPicker) {
+      NonStreamPhotoPickerView { image in
+        selectedPhoto = image
+        showPhotoPicker = false
+        showPhotoPreview = true
+      }
+    }
+    // Photo Preview Sheet
+    .fullScreenCover(isPresented: $showPhotoPreview) {
+      if let photo = selectedPhoto {
+        PhotoPreviewView(
+          photo: photo,
+          onDismiss: {
+            showPhotoPreview = false
+            selectedPhoto = nil
+          },
+          onAnalyze: { image in
+            showPhotoPreview = false
+            Task {
+              await analysisService.analyzePhoto(image)
+              showAnalysisResult = true
+            }
+          }
+        )
+      }
+    }
+    // Analysis Result Sheet
+    .fullScreenCover(isPresented: $showAnalysisResult) {
+      if let result = analysisService.analysisResult {
+        AnalysisResultView(
+          result: result,
+          onDismiss: {
+            showAnalysisResult = false
+            analysisService.clearResult()
+          },
+          onNewScan: {
+            showAnalysisResult = false
+            analysisService.clearResult()
+            showPhotoPicker = true
+          }
+        )
+      }
+    }
+  }
+}
+
+// MARK: - Photo Picker for NonStreamView
+
+struct NonStreamPhotoPickerView: UIViewControllerRepresentable {
+  let onImageSelected: (UIImage) -> Void
+
+  func makeUIViewController(context: Context) -> PHPickerViewController {
+    var config = PHPickerConfiguration()
+    config.filter = .images
+    config.selectionLimit = 1
+
+    let picker = PHPickerViewController(configuration: config)
+    picker.delegate = context.coordinator
+    return picker
+  }
+
+  func updateUIViewController(_ uiViewController: PHPickerViewController, context: Context) {}
+
+  func makeCoordinator() -> Coordinator {
+    Coordinator(self)
+  }
+
+  class Coordinator: NSObject, PHPickerViewControllerDelegate {
+    let parent: NonStreamPhotoPickerView
+
+    init(_ parent: NonStreamPhotoPickerView) {
+      self.parent = parent
+    }
+
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+      picker.dismiss(animated: true)
+
+      guard let provider = results.first?.itemProvider,
+            provider.canLoadObject(ofClass: UIImage.self) else {
+        return
+      }
+
+      provider.loadObject(ofClass: UIImage.self) { image, error in
+        if let uiImage = image as? UIImage {
+          DispatchQueue.main.async {
+            self.parent.onImageSelected(uiImage)
+          }
+        }
       }
     }
   }

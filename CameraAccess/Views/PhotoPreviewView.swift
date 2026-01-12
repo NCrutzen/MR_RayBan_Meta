@@ -47,7 +47,7 @@ struct PhotoPreviewView: View {
               .clipShape(Circle())
           }
           Spacer()
-          Text("Foto Vastgelegd")
+          Text("Photo Captured")
             .font(.headline)
             .foregroundColor(.white)
           Spacer()
@@ -72,7 +72,7 @@ struct PhotoPreviewView: View {
             }) {
               HStack {
                 Image(systemName: "flame.fill")
-                Text("Analyseer op Brandveiligheid")
+                Text("Analyze for Fire Safety")
               }
               .font(.system(size: 16, weight: .semibold))
               .foregroundColor(.white)
@@ -88,7 +88,7 @@ struct PhotoPreviewView: View {
             Button(action: { showShareSheet = true }) {
               HStack {
                 Image(systemName: "square.and.arrow.up")
-                Text("Delen")
+                Text("Share")
               }
               .font(.system(size: 14, weight: .medium))
               .foregroundColor(.mrPrimary)
@@ -101,7 +101,7 @@ struct PhotoPreviewView: View {
             Button(action: { dismissWithAnimation() }) {
               HStack {
                 Image(systemName: "camera.fill")
-                Text("Nieuwe Foto")
+                Text("New Photo")
               }
               .font(.system(size: 14, weight: .medium))
               .foregroundColor(.white)
