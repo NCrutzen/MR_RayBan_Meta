@@ -138,59 +138,119 @@ struct NonStreamView: View {
         MRLoadingOverlay(message: "Analyzing for\nfire hazards...")
       }
     }
-    .sheet(isPresented: $wearablesVM.showGettingStartedSheet) {
-      if #available(iOS 16.0, *) {
-        GettingStartedSheetView(height: $sheetHeight)
-          .presentationDetents([.height(sheetHeight)])
-          .presentationDragIndicator(.visible)
+    .sheet(isPresented: Binding(
+      get: { wearablesVM.showGettingStartedSheet || showPhotoPicker },
+      set: { newValue in
+        if !newValue {
+          wearablesVM.showGettingStartedSheet = false
+          showPhotoPicker = false
+        }
+      }
+    )) {
+      if showPhotoPicker {
+        ImagePicker(selectedImage: $selectedPhoto, isPresented: $showPhotoPicker)
       } else {
-        GettingStartedSheetView(height: $sheetHeight)
+        if #available(iOS 16.0, *) {
+          GettingStartedSheetView(height: $sheetHeight)
+            .presentationDetents([.height(sheetHeight)])
+            .presentationDragIndicator(.visible)
+        } else {
+          GettingStartedSheetView(height: $sheetHeight)
+        }
       }
     }
-    // Photo Picker Sheet
-    .sheet(isPresented: $showPhotoPicker, onDismiss: {
-      // Show preview after picker dismissed if we have a photo
-      if selectedPhoto != nil {
-        showPhotoPreview = true
+    // Photo Preview - using onChange to trigger after picker closes
+    .onChange(of: selectedPhoto) { newPhoto in
+      if newPhoto != nil && !showPhotoPicker {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+          showPhotoPreview = true
+        }
       }
-    }) {
-      ImagePicker(selectedImage: $selectedPhoto, isPresented: $showPhotoPicker)
     }
     // Photo Preview Sheet
     .fullScreenCover(isPresented: $showPhotoPreview) {
-      if let photo = selectedPhoto {
-        PhotoPreviewView(
-          photo: photo,
-          onDismiss: {
-            showPhotoPreview = false
-            selectedPhoto = nil
-          },
-          onAnalyze: { image in
-            showPhotoPreview = false
-            Task {
-              await analysisService.analyzePhoto(image)
-              showAnalysisResult = true
-            }
+      PhotoPreviewWrapper(
+        photo: selectedPhoto,
+        onDismiss: {
+          showPhotoPreview = false
+          selectedPhoto = nil
+        },
+        onAnalyze: { image in
+          showPhotoPreview = false
+          Task {
+            await analysisService.analyzePhoto(image)
+            showAnalysisResult = true
           }
-        )
-      }
+        }
+      )
     }
     // Analysis Result Sheet
     .fullScreenCover(isPresented: $showAnalysisResult) {
-      if let result = analysisService.analysisResult {
-        AnalysisResultView(
-          result: result,
-          onDismiss: {
-            showAnalysisResult = false
-            analysisService.clearResult()
-          },
-          onNewScan: {
-            showAnalysisResult = false
-            analysisService.clearResult()
+      AnalysisResultWrapper(
+        result: analysisService.analysisResult,
+        onDismiss: {
+          showAnalysisResult = false
+          analysisService.clearResult()
+        },
+        onNewScan: {
+          showAnalysisResult = false
+          analysisService.clearResult()
+          DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             showPhotoPicker = true
           }
-        )
-      }
+        }
+      )
+    }
+  }
+
+  // Helper function to show photo picker
+  private func openPhotoPicker() {
+    showPhotoPicker = true
+  }
+}
+
+// MARK: - Wrapper Views to handle optional content
+
+struct PhotoPreviewWrapper: View {
+  let photo: UIImage?
+  let onDismiss: () -> Void
+  let onAnalyze: (UIImage) -> Void
+
+  var body: some View {
+    if let photo = photo {
+      PhotoPreviewView(
+        photo: photo,
+        onDismiss: onDismiss,
+        onAnalyze: onAnalyze
+      )
+    } else {
+      Color.black
+        .ignoresSafeArea()
+        .onAppear {
+          onDismiss()
+        }
+    }
+  }
+}
+
+struct AnalysisResultWrapper: View {
+  let result: AnalysisResult?
+  let onDismiss: () -> Void
+  let onNewScan: () -> Void
+
+  var body: some View {
+    if let result = result {
+      AnalysisResultView(
+        result: result,
+        onDismiss: onDismiss,
+        onNewScan: onNewScan
+      )
+    } else {
+      Color.black
+        .ignoresSafeArea()
+        .onAppear {
+          onDismiss()
+        }
     }
   }
 }

@@ -124,49 +124,50 @@ struct HomeScreenView: View {
       }
     }
     // Photo Picker Sheet
-    .sheet(isPresented: $showPhotoPicker, onDismiss: {
-      // Show preview after picker dismissed if we have a photo
-      if selectedPhoto != nil {
-        showPhotoPreview = true
-      }
-    }) {
+    .sheet(isPresented: $showPhotoPicker) {
       HomeImagePicker(selectedImage: $selectedPhoto, isPresented: $showPhotoPicker)
+    }
+    // Show preview after photo is selected
+    .onChange(of: selectedPhoto) { newPhoto in
+      if newPhoto != nil && !showPhotoPicker {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+          showPhotoPreview = true
+        }
+      }
     }
     // Photo Preview Sheet
     .fullScreenCover(isPresented: $showPhotoPreview) {
-      if let photo = selectedPhoto {
-        PhotoPreviewView(
-          photo: photo,
-          onDismiss: {
-            showPhotoPreview = false
-            selectedPhoto = nil
-          },
-          onAnalyze: { image in
-            showPhotoPreview = false
-            Task {
-              await analysisService.analyzePhoto(image)
-              showAnalysisResult = true
-            }
+      PhotoPreviewWrapper(
+        photo: selectedPhoto,
+        onDismiss: {
+          showPhotoPreview = false
+          selectedPhoto = nil
+        },
+        onAnalyze: { image in
+          showPhotoPreview = false
+          Task {
+            await analysisService.analyzePhoto(image)
+            showAnalysisResult = true
           }
-        )
-      }
+        }
+      )
     }
     // Analysis Result Sheet
     .fullScreenCover(isPresented: $showAnalysisResult) {
-      if let result = analysisService.analysisResult {
-        AnalysisResultView(
-          result: result,
-          onDismiss: {
-            showAnalysisResult = false
-            analysisService.clearResult()
-          },
-          onNewScan: {
-            showAnalysisResult = false
-            analysisService.clearResult()
+      AnalysisResultWrapper(
+        result: analysisService.analysisResult,
+        onDismiss: {
+          showAnalysisResult = false
+          analysisService.clearResult()
+        },
+        onNewScan: {
+          showAnalysisResult = false
+          analysisService.clearResult()
+          DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             showPhotoPicker = true
           }
-        )
-      }
+        }
+      )
     }
   }
 }
