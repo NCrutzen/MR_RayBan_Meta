@@ -1,82 +1,163 @@
-# MR_RayBan_Meta
+# Meta Glasses Camera
 
-Developing Moyne Roberts applications for the Ray-Ban Meta Wayfarer Gen 2 glasses with iPhone 14 Pro integration.
+An iOS app for streaming video and capturing photos from Ray-Ban Meta smart glasses using Meta's official Wearables Device Access Toolkit (MWDAT).
 
-## Overview
+## Features
 
-This repository contains proof of concept implementations for the Ray-Ban Meta smart glasses platform. The POCs demonstrate various capabilities including voice control, camera integration, AI vision, and live streaming.
+- **Live Video Streaming**: Stream video directly from your Ray-Ban Meta glasses camera to your iPhone
+- **Photo Capture**: Take photos from your glasses with a single tap
+- **Time-Limited Streaming**: Set streaming duration limits (1, 5, 10, or 15 minutes)
+- **Device Management**: Connect, disconnect, and manage your Meta glasses
+- **Mock Device Support**: Test the app in debug mode without physical hardware
 
-## Ray-Ban Meta Wayfarer Gen 2 Specifications
+## Requirements
 
-| Feature | Specification |
-|---------|---------------|
-| Camera | 12MP Ultra-wide camera |
-| Video | 1080p @ 30fps, 720p @ 30fps |
-| Audio | 5-microphone array, open-ear speakers |
-| Storage | 32GB internal |
-| Battery | Up to 4 hours continuous use |
-| Connectivity | Bluetooth 5.2, WiFi |
-| AI Assistant | Meta AI built-in |
+- iOS 17.0+
+- Xcode 15.0+
+- Swift 5.0+
+- Ray-Ban Meta glasses (Gen 1 or Gen 2) for production use
+- Meta AI app installed on your iPhone
+
+## Supported Devices
+
+- Ray-Ban Meta Wayfarer (Gen 1 & Gen 2)
+- Ray-Ban Meta Headliner (Gen 1 & Gen 2)
+- Oakley Meta HSTN
+
+## Installation
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/NCrutzen/MR_RayBan_Meta.git
+cd MR_RayBan_Meta
+```
+
+### 2. Open in Xcode
+
+```bash
+open MetaGlassesCamera.xcodeproj
+```
+
+### 3. Configure Signing
+
+1. Select the `MetaGlassesCamera` target
+2. Go to "Signing & Capabilities"
+3. Select your Development Team
+4. Update the Bundle Identifier if needed
+
+### 4. Register Your App (For Production)
+
+To use the app with real glasses:
+
+1. Visit the [Meta Wearables Developer Center](https://wearables.developer.meta.com)
+2. Register your app and get your `MetaAppID` and `ClientToken`
+3. Update the `Info.plist` with your credentials:
+
+```xml
+<key>MWDAT</key>
+<dict>
+    <key>MetaAppID</key>
+    <string>YOUR_META_APP_ID</string>
+    <key>ClientToken</key>
+    <string>YOUR_CLIENT_TOKEN</string>
+    <key>TeamID</key>
+    <string>YOUR_APPLE_TEAM_ID</string>
+</dict>
+```
+
+### 5. Build and Run
+
+Build the project in Xcode and run on your iPhone.
+
+## Usage
+
+### Connecting to Glasses
+
+1. Launch the app
+2. Tap "Connect my glasses"
+3. You'll be redirected to the Meta AI app to confirm the connection
+4. Return to the app once connected
+
+### Streaming Video
+
+1. Once connected, tap "Start streaming"
+2. Grant camera permissions when prompted
+3. View the live video feed from your glasses
+4. Use the timer button to set streaming limits
+5. Tap the camera button to capture photos
+6. Tap "Stop streaming" to end the session
+
+### Debug Mode (Mock Device)
+
+For development without physical glasses:
+
+1. Build in Debug configuration
+2. Tap the debug button (ladybug icon)
+3. Pair a mock Ray-Ban Meta device
+4. Power on and configure the mock device
+5. Select mock video/image content for testing
 
 ## Project Structure
 
 ```
-MR_RayBan_Meta/
-├── docs/                          # Documentation
-│   ├── CAPABILITIES.md            # Glasses capabilities reference
-│   ├── IPHONE_SETUP.md            # iPhone 14 Pro setup guide
-│   └── API_REFERENCE.md           # API and integration reference
-├── ios-companion-app/             # iOS companion app (Swift/SwiftUI)
-│   └── RayBanMetaCompanion/       # Xcode project
-├── pocs/                          # Proof of Concept implementations
-│   ├── voice-assistant/           # Voice command POC
-│   ├── photo-capture/             # Photo capture & processing POC
-│   ├── live-stream/               # Live streaming POC
-│   └── ai-vision/                 # AI vision & object detection POC
-├── scripts/                       # Utility scripts
-└── assets/                        # Shared assets
+MetaGlassesCamera/
+├── Sources/
+│   ├── App/
+│   │   └── MetaGlassesCameraApp.swift    # App entry point
+│   ├── ViewModels/
+│   │   ├── WearablesViewModel.swift      # Device management
+│   │   ├── StreamSessionViewModel.swift  # Streaming logic
+│   │   ├── DebugMenuViewModel.swift      # Debug controls
+│   │   └── MockDeviceKit/                # Mock device VMs
+│   ├── Views/
+│   │   ├── MainAppView.swift             # Navigation hub
+│   │   ├── HomeScreenView.swift          # Welcome/connect screen
+│   │   ├── StreamSessionView.swift       # Streaming container
+│   │   ├── StreamView.swift              # Active streaming UI
+│   │   ├── NonStreamView.swift           # Pre-streaming UI
+│   │   ├── Components/                   # Reusable components
+│   │   └── MockDeviceKit/                # Debug UI
+│   └── Utils/
+│       ├── TimeUtils.swift               # Timer utilities
+│       └── ColorExtensions.swift         # Theme colors
+├── Assets.xcassets/                      # App assets
+└── Info.plist                            # App configuration
 ```
 
-## Prerequisites
+## Dependencies
 
-### Hardware
-- Ray-Ban Meta Wayfarer Gen 2 glasses
-- iPhone 14 Pro (iOS 16.0+)
-- Mac with Xcode 15+ (for iOS development)
+This project uses Meta's official SDK via Swift Package Manager:
 
-### Software
-- Meta View app (App Store)
-- WhatsApp (optional, for messaging features)
-- Facebook/Instagram app (for live streaming)
+- **MWDATCore**: Core SDK for device management and registration
+- **MWDATCamera**: Camera streaming and photo capture functionality
+- **MWDATMockDevice**: Mock device kit for testing (Debug only)
 
-## Quick Start
+Package URL: `https://github.com/facebook/meta-wearables-dat-ios`
 
-1. **Pair your glasses**: Download Meta View app and follow pairing instructions
-2. **Clone this repository**: `git clone <repo-url>`
-3. **Open iOS project**: Open `ios-companion-app/RayBanMetaCompanion.xcodeproj` in Xcode
-4. **Run on device**: Build and run on your iPhone 14 Pro
+## Technical Details
 
-## POC Descriptions
+### Camera Capabilities
 
-### 1. Voice Assistant POC
-Demonstrates voice command integration using "Hey Meta" wake word and custom voice actions.
+- Maximum streaming resolution: 720p
+- Maximum frame rate: 30 FPS (reduced when Bluetooth bandwidth is limited)
+- Photo capture format: JPEG
 
-### 2. Photo Capture POC
-Shows camera integration for capturing photos, processing them on iPhone, and triggering actions.
+### Permissions Required
 
-### 3. Live Stream POC
-Implements live streaming workflows to Facebook/Instagram with companion app control.
+- **Bluetooth**: For connecting to Meta glasses
+- **Photo Library**: For saving captured photos
 
-### 4. AI Vision POC
-Explores Meta AI vision capabilities for object recognition and scene understanding.
+## Resources
 
-## Development Notes
-
-- The Ray-Ban Meta glasses communicate with iPhone via Bluetooth
-- Media is synced through the Meta View app
-- Custom integrations require building companion apps that work alongside Meta View
-- Voice commands use "Hey Meta" wake word
+- [Meta Wearables Developer Center](https://wearables.developer.meta.com)
+- [Meta Wearables DAT iOS SDK](https://github.com/facebook/meta-wearables-dat-ios)
+- [Getting Started Guide](https://wearables.developer.meta.com/docs/getting-started-toolkit/)
 
 ## License
 
-Proprietary - Moyne Roberts © 2024
+This project is based on Meta's sample code and is subject to their licensing terms.
+
+## Acknowledgments
+
+Built using the [Meta Wearables Device Access Toolkit](https://developers.meta.com/wearables/).

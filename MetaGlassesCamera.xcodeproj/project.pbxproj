@@ -1,0 +1,548 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		/* App Entry Point */
+		APP001 /* MetaGlassesCameraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC001 /* MetaGlassesCameraApp.swift */; };
+
+		/* ViewModels */
+		VM001 /* WearablesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC002 /* WearablesViewModel.swift */; };
+		VM002 /* StreamSessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC003 /* StreamSessionViewModel.swift */; };
+		VM003 /* DebugMenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC004 /* DebugMenuViewModel.swift */; };
+		VM004 /* MockDeviceKitViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC005 /* MockDeviceKitViewModel.swift */; };
+		VM005 /* MockDeviceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC006 /* MockDeviceViewModel.swift */; };
+
+		/* Views */
+		VW001 /* MainAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC007 /* MainAppView.swift */; };
+		VW002 /* HomeScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC008 /* HomeScreenView.swift */; };
+		VW003 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC009 /* RegistrationView.swift */; };
+		VW004 /* StreamSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC010 /* StreamSessionView.swift */; };
+		VW005 /* StreamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC011 /* StreamView.swift */; };
+		VW006 /* NonStreamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC012 /* NonStreamView.swift */; };
+		VW007 /* PhotoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC013 /* PhotoPreviewView.swift */; };
+		VW008 /* DebugMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC014 /* DebugMenuView.swift */; };
+
+		/* Components */
+		CMP001 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC015 /* CustomButton.swift */; };
+		CMP002 /* CircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC016 /* CircleButton.swift */; };
+		CMP003 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC017 /* CardView.swift */; };
+		CMP004 /* StatusText.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC018 /* StatusText.swift */; };
+		CMP005 /* MediaPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC019 /* MediaPickerView.swift */; };
+
+		/* MockDeviceKit Views */
+		MDK001 /* MockDeviceKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC020 /* MockDeviceKitView.swift */; };
+		MDK002 /* MockDeviceCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC021 /* MockDeviceCardView.swift */; };
+		MDK003 /* MockDeviceKitButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC022 /* MockDeviceKitButton.swift */; };
+
+		/* Utils */
+		UTL001 /* TimeUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC023 /* TimeUtils.swift */; };
+		UTL002 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC024 /* ColorExtensions.swift */; };
+
+		/* Assets */
+		AST001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = RES001 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		/* Product */
+		PRD001 /* MetaGlassesCamera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetaGlassesCamera.app; sourceTree = BUILT_PRODUCTS_DIR; };
+
+		/* Source Files */
+		SRC001 /* MetaGlassesCameraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaGlassesCameraApp.swift; sourceTree = "<group>"; };
+		SRC002 /* WearablesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WearablesViewModel.swift; sourceTree = "<group>"; };
+		SRC003 /* StreamSessionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamSessionViewModel.swift; sourceTree = "<group>"; };
+		SRC004 /* DebugMenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugMenuViewModel.swift; sourceTree = "<group>"; };
+		SRC005 /* MockDeviceKitViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDeviceKitViewModel.swift; sourceTree = "<group>"; };
+		SRC006 /* MockDeviceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDeviceViewModel.swift; sourceTree = "<group>"; };
+		SRC007 /* MainAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppView.swift; sourceTree = "<group>"; };
+		SRC008 /* HomeScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenView.swift; sourceTree = "<group>"; };
+		SRC009 /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
+		SRC010 /* StreamSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamSessionView.swift; sourceTree = "<group>"; };
+		SRC011 /* StreamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamView.swift; sourceTree = "<group>"; };
+		SRC012 /* NonStreamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonStreamView.swift; sourceTree = "<group>"; };
+		SRC013 /* PhotoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewView.swift; sourceTree = "<group>"; };
+		SRC014 /* DebugMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugMenuView.swift; sourceTree = "<group>"; };
+		SRC015 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
+		SRC016 /* CircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleButton.swift; sourceTree = "<group>"; };
+		SRC017 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		SRC018 /* StatusText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusText.swift; sourceTree = "<group>"; };
+		SRC019 /* MediaPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPickerView.swift; sourceTree = "<group>"; };
+		SRC020 /* MockDeviceKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDeviceKitView.swift; sourceTree = "<group>"; };
+		SRC021 /* MockDeviceCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDeviceCardView.swift; sourceTree = "<group>"; };
+		SRC022 /* MockDeviceKitButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDeviceKitButton.swift; sourceTree = "<group>"; };
+		SRC023 /* TimeUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeUtils.swift; sourceTree = "<group>"; };
+		SRC024 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
+
+		/* Resources */
+		RES001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		RES002 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FRM001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		GRP000 /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				GRP001 /* MetaGlassesCamera */,
+				GRP100 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		GRP001 /* MetaGlassesCamera */ = {
+			isa = PBXGroup;
+			children = (
+				GRP002 /* Sources */,
+				RES001 /* Assets.xcassets */,
+				RES002 /* Info.plist */,
+			);
+			path = MetaGlassesCamera;
+			sourceTree = "<group>";
+		};
+		GRP002 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				GRP003 /* App */,
+				GRP004 /* ViewModels */,
+				GRP005 /* Views */,
+				GRP006 /* Utils */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		GRP003 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				SRC001 /* MetaGlassesCameraApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		GRP004 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				SRC002 /* WearablesViewModel.swift */,
+				SRC003 /* StreamSessionViewModel.swift */,
+				SRC004 /* DebugMenuViewModel.swift */,
+				GRP007 /* MockDeviceKit */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		GRP005 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				SRC007 /* MainAppView.swift */,
+				SRC008 /* HomeScreenView.swift */,
+				SRC009 /* RegistrationView.swift */,
+				SRC010 /* StreamSessionView.swift */,
+				SRC011 /* StreamView.swift */,
+				SRC012 /* NonStreamView.swift */,
+				SRC013 /* PhotoPreviewView.swift */,
+				SRC014 /* DebugMenuView.swift */,
+				GRP008 /* Components */,
+				GRP009 /* MockDeviceKit */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		GRP006 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				SRC023 /* TimeUtils.swift */,
+				SRC024 /* ColorExtensions.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		GRP007 /* MockDeviceKit */ = {
+			isa = PBXGroup;
+			children = (
+				SRC005 /* MockDeviceKitViewModel.swift */,
+				SRC006 /* MockDeviceViewModel.swift */,
+			);
+			path = MockDeviceKit;
+			sourceTree = "<group>";
+		};
+		GRP008 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				SRC015 /* CustomButton.swift */,
+				SRC016 /* CircleButton.swift */,
+				SRC017 /* CardView.swift */,
+				SRC018 /* StatusText.swift */,
+				SRC019 /* MediaPickerView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		GRP009 /* MockDeviceKit */ = {
+			isa = PBXGroup;
+			children = (
+				SRC020 /* MockDeviceKitView.swift */,
+				SRC021 /* MockDeviceCardView.swift */,
+				SRC022 /* MockDeviceKitButton.swift */,
+			);
+			path = MockDeviceKit;
+			sourceTree = "<group>";
+		};
+		GRP100 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				PRD001 /* MetaGlassesCamera.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		TGT001 /* MetaGlassesCamera */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CFG003 /* Build configuration list for PBXNativeTarget "MetaGlassesCamera" */;
+			buildPhases = (
+				SRC100 /* Sources */,
+				FRM001 /* Frameworks */,
+				RSC001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MetaGlassesCamera;
+			packageProductDependencies = (
+				PKG001 /* MWDATCore */,
+				PKG002 /* MWDATCamera */,
+				PKG003 /* MWDATMockDevice */,
+			);
+			productName = MetaGlassesCamera;
+			productReference = PRD001 /* MetaGlassesCamera.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		PRJ001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					TGT001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = CFG001 /* Build configuration list for PBXProject "MetaGlassesCamera" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = GRP000 /* Root */;
+			packageReferences = (
+				PKR001 /* XCRemoteSwiftPackageReference "meta-wearables-dat-ios" */,
+			);
+			productRefGroup = GRP100 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				TGT001 /* MetaGlassesCamera */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		RSC001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AST001 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		SRC100 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				APP001 /* MetaGlassesCameraApp.swift in Sources */,
+				VM001 /* WearablesViewModel.swift in Sources */,
+				VM002 /* StreamSessionViewModel.swift in Sources */,
+				VM003 /* DebugMenuViewModel.swift in Sources */,
+				VM004 /* MockDeviceKitViewModel.swift in Sources */,
+				VM005 /* MockDeviceViewModel.swift in Sources */,
+				VW001 /* MainAppView.swift in Sources */,
+				VW002 /* HomeScreenView.swift in Sources */,
+				VW003 /* RegistrationView.swift in Sources */,
+				VW004 /* StreamSessionView.swift in Sources */,
+				VW005 /* StreamView.swift in Sources */,
+				VW006 /* NonStreamView.swift in Sources */,
+				VW007 /* PhotoPreviewView.swift in Sources */,
+				VW008 /* DebugMenuView.swift in Sources */,
+				CMP001 /* CustomButton.swift in Sources */,
+				CMP002 /* CircleButton.swift in Sources */,
+				CMP003 /* CardView.swift in Sources */,
+				CMP004 /* StatusText.swift in Sources */,
+				CMP005 /* MediaPickerView.swift in Sources */,
+				MDK001 /* MockDeviceKitView.swift in Sources */,
+				MDK002 /* MockDeviceCardView.swift in Sources */,
+				MDK003 /* MockDeviceKitButton.swift in Sources */,
+				UTL001 /* TimeUtils.swift in Sources */,
+				UTL002 /* ColorExtensions.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		CFG101 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CFG102 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CFG201 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MetaGlassesCamera/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Meta Glasses Camera";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.metaglassescamera;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CFG202 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MetaGlassesCamera/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Meta Glasses Camera";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.metaglassescamera;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CFG001 /* Build configuration list for PBXProject "MetaGlassesCamera" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CFG101 /* Debug */,
+				CFG102 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CFG003 /* Build configuration list for PBXNativeTarget "MetaGlassesCamera" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CFG201 /* Debug */,
+				CFG202 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		PKR001 /* XCRemoteSwiftPackageReference "meta-wearables-dat-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/facebook/meta-wearables-dat-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		PKG001 /* MWDATCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = PKR001 /* XCRemoteSwiftPackageReference "meta-wearables-dat-ios" */;
+			productName = MWDATCore;
+		};
+		PKG002 /* MWDATCamera */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = PKR001 /* XCRemoteSwiftPackageReference "meta-wearables-dat-ios" */;
+			productName = MWDATCamera;
+		};
+		PKG003 /* MWDATMockDevice */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = PKR001 /* XCRemoteSwiftPackageReference "meta-wearables-dat-ios" */;
+			productName = MWDATMockDevice;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = PRJ001 /* Project object */;
+}
