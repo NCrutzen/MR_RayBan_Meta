@@ -11,6 +11,7 @@
 //
 // Welcome screen that guides users through the DAT SDK registration process.
 // This view is displayed when the app is not yet registered.
+// Includes option to analyze photos from library for fire safety.
 //
 
 import MWDATCore
@@ -19,59 +20,203 @@ import SwiftUI
 struct HomeScreenView: View {
   @ObservedObject var viewModel: WearablesViewModel
 
+  // Photo analysis state
+  @StateObject private var analysisService = FireHazardAnalysisService()
+  @State private var showPhotoPicker = false
+  @State private var showPhotoPreview = false
+  @State private var showAnalysisResult = false
+  @State private var selectedPhoto: UIImage?
+
   var body: some View {
     ZStack {
-      Color.white.edgesIgnoringSafeArea(.all)
+      Color.mrBackground.edgesIgnoringSafeArea(.all)
 
-      VStack(spacing: 12) {
+      VStack(spacing: 16) {
+        // Moyne Roberts Header
+        VStack(spacing: 8) {
+          Text("Moyne Roberts")
+            .font(.system(size: 28, weight: .bold))
+            .foregroundColor(.mrPrimary)
+          Text("Brandveiligheid Inspectie")
+            .font(.system(size: 16))
+            .foregroundColor(.mrTextSecondary)
+        }
+        .padding(.top, 20)
+
         Spacer()
 
+        // App Icon
         Image(.cameraAccessIcon)
           .resizable()
           .aspectRatio(contentMode: .fit)
-          .frame(width: 120)
+          .frame(width: 100)
 
+        // Feature tips
         VStack(spacing: 12) {
           HomeTipItemView(
             resource: .smartGlassesIcon,
-            title: "Video Capture",
-            text: "Record videos directly from your glasses, from your point of view."
-          )
-          HomeTipItemView(
-            resource: .soundIcon,
-            title: "Open-Ear Audio",
-            text: "Hear notifications while keeping your ears open to the world around you."
+            title: "Slimme Bril",
+            text: "Maak foto's direct vanaf je Ray-Ban Meta bril."
           )
           HomeTipItemView(
             resource: .walkingIcon,
-            title: "Enjoy On-the-Go",
-            text: "Stay hands-free while you move through your day. Move freely, stay connected."
+            title: "Handsfree Inspectie",
+            text: "Loop rond en leg brandveiligheidsrisico's vast."
           )
         }
 
         Spacer()
 
-        VStack(spacing: 20) {
-          Text("You'll be redirected to the Meta AI app to confirm your connection.")
-            .font(.system(size: 14))
-            .foregroundColor(.gray)
-            .multilineTextAlignment(.center)
-            .fixedSize(horizontal: false, vertical: true)
-            .padding(.horizontal, 12)
+        // Action Buttons
+        VStack(spacing: 16) {
+          // Photo Library Button
+          Button(action: { showPhotoPicker = true }) {
+            HStack {
+              Image(systemName: "photo.on.rectangle")
+              Text("Kies Foto uit Bibliotheek")
+            }
+            .font(.system(size: 16, weight: .semibold))
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 16)
+            .background(Color.mrSecondary)
+            .cornerRadius(12)
+          }
 
-          CustomButton(
-            title: viewModel.registrationState == .registering ? "Connecting..." : "Connect my glasses",
-            style: .primary,
-            isDisabled: viewModel.registrationState == .registering
-          ) {
-            viewModel.connectGlasses()
+          // Divider with text
+          HStack {
+            Rectangle()
+              .fill(Color.mrTextSecondary.opacity(0.3))
+              .frame(height: 1)
+            Text("of")
+              .font(.system(size: 14))
+              .foregroundColor(.mrTextSecondary)
+              .padding(.horizontal, 12)
+            Rectangle()
+              .fill(Color.mrTextSecondary.opacity(0.3))
+              .frame(height: 1)
+          }
+          .padding(.vertical, 4)
+
+          // Connect Glasses Button
+          VStack(spacing: 8) {
+            Text("Verbind je Meta bril voor live opnames")
+              .font(.system(size: 14))
+              .foregroundColor(.mrTextSecondary)
+              .multilineTextAlignment(.center)
+
+            CustomButton(
+              title: viewModel.registrationState == .registering ? "Verbinden..." : "Verbind Meta Bril",
+              style: .primary,
+              isDisabled: viewModel.registrationState == .registering
+            ) {
+              viewModel.connectGlasses()
+            }
+          }
+        }
+        .padding(.bottom, 8)
+      }
+      .padding(.all, 24)
+
+      // Loading overlay
+      if analysisService.isAnalyzing {
+        MRLoadingOverlay(message: "Analyseren op\nbrandveiligheid...")
+      }
+    }
+    // Photo Picker Sheet
+    .sheet(isPresented: $showPhotoPicker) {
+      PhotoPickerView { image in
+        selectedPhoto = image
+        showPhotoPicker = false
+        showPhotoPreview = true
+      }
+    }
+    // Photo Preview Sheet
+    .fullScreenCover(isPresented: $showPhotoPreview) {
+      if let photo = selectedPhoto {
+        PhotoPreviewView(
+          photo: photo,
+          onDismiss: {
+            showPhotoPreview = false
+            selectedPhoto = nil
+          },
+          onAnalyze: { image in
+            showPhotoPreview = false
+            Task {
+              await analysisService.analyzePhoto(image)
+              showAnalysisResult = true
+            }
+          }
+        )
+      }
+    }
+    // Analysis Result Sheet
+    .fullScreenCover(isPresented: $showAnalysisResult) {
+      if let result = analysisService.analysisResult {
+        AnalysisResultView(
+          result: result,
+          onDismiss: {
+            showAnalysisResult = false
+            analysisService.clearResult()
+          },
+          onNewScan: {
+            showAnalysisResult = false
+            analysisService.clearResult()
+            showPhotoPicker = true
+          }
+        )
+      }
+    }
+  }
+}
+
+// MARK: - Photo Picker using PhotosUI
+
+import PhotosUI
+
+struct PhotoPickerView: UIViewControllerRepresentable {
+  let onImageSelected: (UIImage) -> Void
+
+  func makeUIViewController(context: Context) -> PHPickerViewController {
+    var config = PHPickerConfiguration()
+    config.filter = .images
+    config.selectionLimit = 1
+
+    let picker = PHPickerViewController(configuration: config)
+    picker.delegate = context.coordinator
+    return picker
+  }
+
+  func updateUIViewController(_ uiViewController: PHPickerViewController, context: Context) {}
+
+  func makeCoordinator() -> Coordinator {
+    Coordinator(self)
+  }
+
+  class Coordinator: NSObject, PHPickerViewControllerDelegate {
+    let parent: PhotoPickerView
+
+    init(_ parent: PhotoPickerView) {
+      self.parent = parent
+    }
+
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+      picker.dismiss(animated: true)
+
+      guard let provider = results.first?.itemProvider,
+            provider.canLoadObject(ofClass: UIImage.self) else {
+        return
+      }
+
+      provider.loadObject(ofClass: UIImage.self) { image, error in
+        if let uiImage = image as? UIImage {
+          DispatchQueue.main.async {
+            self.parent.onImageSelected(uiImage)
           }
         }
       }
-      .padding(.all, 24)
     }
   }
-
 }
 
 struct HomeTipItemView: View {

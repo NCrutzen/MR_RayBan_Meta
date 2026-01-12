@@ -166,12 +166,24 @@ class FireHazardAnalysisService: ObservableObject {
 
         request.httpBody = try JSONSerialization.data(withJSONObject: payload)
 
+        print("🌐 Sending request to: \(url)")
+
         let (data, response) = try await URLSession.shared.data(for: request)
 
-        guard let httpResponse = response as? HTTPURLResponse,
-              httpResponse.statusCode == 200 else {
+        guard let httpResponse = response as? HTTPURLResponse else {
             throw AnalysisError.apiError
         }
+
+        print("📡 HTTP Status: \(httpResponse.statusCode)")
+
+        if httpResponse.statusCode != 200 {
+            let responseBody = String(data: data, encoding: .utf8) ?? "No response body"
+            print("❌ API Error Response: \(responseBody)")
+            throw AnalysisError.httpError(statusCode: httpResponse.statusCode, message: responseBody)
+        }
+
+        let responseBody = String(data: data, encoding: .utf8) ?? ""
+        print("✅ Response received: \(responseBody.prefix(500))...")
 
         return try parseResponse(data)
     }
@@ -265,6 +277,7 @@ enum AnalysisError: LocalizedError {
     case imageConversionFailed
     case missingAPIKey
     case apiError
+    case httpError(statusCode: Int, message: String)
     case parseError
 
     var errorDescription: String? {
@@ -275,6 +288,8 @@ enum AnalysisError: LocalizedError {
             return "API key niet geconfigureerd"
         case .apiError:
             return "Fout bij communicatie met analyse service"
+        case .httpError(let statusCode, let message):
+            return "HTTP \(statusCode): \(message.prefix(200))"
         case .parseError:
             return "Kon analyse resultaat niet verwerken"
         }
