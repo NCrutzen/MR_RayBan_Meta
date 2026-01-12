@@ -11,18 +11,42 @@ import UIKit
 
 struct AnalysisResult: Identifiable {
     let id = UUID()
-    let riskLevel: String
+    let header: Header
     let summary: String
-    let hazards: [String]
+    let safetyCompliance: [ComplianceItem]
+    let identifiedHazards: [Hazard]
     let recommendations: [String]
-    let complianceItems: [ComplianceItem]
+    let footer: Footer
     let timestamp: Date
     let photo: UIImage
 
+    struct Header {
+        let title: String
+        let company: String
+        let location: String
+        let date: String
+        let riskLevel: String
+    }
+
     struct ComplianceItem: Identifiable {
         let id = UUID()
-        let item: String
+        let key: String
+        let label: String
         let status: Bool
+    }
+
+    struct Hazard: Identifiable {
+        let id = UUID()
+        let title: String
+        let riskLevel: String
+        let description: String
+        let recommendedAction: String
+    }
+
+    struct Footer {
+        let generatedBy: String
+        let analyzedBy: String
+        let links: [String]
     }
 }
 
@@ -40,11 +64,9 @@ class FireHazardAnalysisService: ObservableObject {
 
     init() {
         // Load API key from environment or Info.plist
-        // Check environment first, then Info.plist
         let envKey = ProcessInfo.processInfo.environment["ORQ_API_KEY"] ?? ""
         let plistKey = Bundle.main.object(forInfoDictionaryKey: "ORQ_API_KEY") as? String ?? ""
 
-        // Use environment if available, otherwise plist (but filter out unresolved variables)
         if !envKey.isEmpty {
             self.apiKey = envKey
         } else if !plistKey.isEmpty && !plistKey.hasPrefix("$(") {
@@ -64,12 +86,10 @@ class FireHazardAnalysisService: ObservableObject {
             self.deploymentKey = "Fire_Safety_Analyses"
         }
 
-        // Debug output
         print("🔑 Orq.ai API Key configured: \(!apiKey.isEmpty)")
         print("📦 Orq.ai Deployment Key: \(deploymentKey)")
     }
 
-    // Allow setting API key directly (for testing)
     func configure(apiKey: String, deploymentKey: String? = nil) {
         self.apiKey = apiKey
         if let deployment = deploymentKey {
@@ -86,33 +106,47 @@ class FireHazardAnalysisService: ObservableObject {
         print("🔑 API Key present: \(!apiKey.isEmpty)")
 
         do {
-            // Convert image to base64
             guard let imageData = image.jpegData(compressionQuality: 0.8) else {
                 throw AnalysisError.imageConversionFailed
             }
             let base64Image = imageData.base64EncodedString()
             print("📷 Image converted to base64 (\(base64Image.count) chars)")
 
-            // Prepare the request
             let result = try await sendAnalysisRequest(base64Image: base64Image)
             print("✅ Analysis successful!")
 
             self.analysisResult = AnalysisResult(
-                riskLevel: result.riskLevel,
+                header: AnalysisResult.Header(
+                    title: result.header.title,
+                    company: result.header.company,
+                    location: result.header.location,
+                    date: result.header.date,
+                    riskLevel: result.header.riskLevel
+                ),
                 summary: result.summary,
-                hazards: result.hazards,
-                recommendations: result.recommendations,
-                complianceItems: result.complianceItems.map {
-                    AnalysisResult.ComplianceItem(item: $0.item, status: $0.status)
+                safetyCompliance: result.safetyCompliance.map {
+                    AnalysisResult.ComplianceItem(key: $0.key, label: $0.label, status: $0.status)
                 },
+                identifiedHazards: result.identifiedHazards.map {
+                    AnalysisResult.Hazard(
+                        title: $0.title,
+                        riskLevel: $0.riskLevel,
+                        description: $0.description,
+                        recommendedAction: $0.recommendedAction
+                    )
+                },
+                recommendations: result.recommendations,
+                footer: AnalysisResult.Footer(
+                    generatedBy: result.footer.generatedBy,
+                    analyzedBy: result.footer.analyzedBy,
+                    links: result.footer.links
+                ),
                 timestamp: Date(),
                 photo: image
             )
         } catch {
             print("❌ Analysis failed: \(error.localizedDescription)")
             self.errorMessage = error.localizedDescription
-
-            // Fallback to local analysis if API fails - but show error in summary
             self.analysisResult = performLocalAnalysis(image, error: error.localizedDescription)
         }
 
@@ -128,7 +162,6 @@ class FireHazardAnalysisService: ObservableObject {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
 
-        // Debug: show first 15 chars of API key
         let keyPreview = String(apiKey.prefix(15))
         print("🔐 API Key starts with: \(keyPreview)...")
         print("🔐 API Key length: \(apiKey.count) characters")
@@ -137,7 +170,6 @@ class FireHazardAnalysisService: ObservableObject {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 
-        // Orq.ai deployment invoke format
         let payload: [String: Any] = [
             "key": deploymentKey,
             "context": [
@@ -175,7 +207,7 @@ class FireHazardAnalysisService: ObservableObject {
     }
 
     private func parseResponse(_ data: Data) throws -> OrqResponse {
-        // Parse the Orq.ai response
+        // Parse the Orq.ai response wrapper
         guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
               let choices = json["choices"] as? [[String: Any]],
               let firstChoice = choices.first,
@@ -196,41 +228,97 @@ class FireHazardAnalysisService: ObservableObject {
             throw AnalysisError.parseError
         }
 
+        // Parse header
+        let headerDict = result["header"] as? [String: Any] ?? [:]
+        let header = OrqHeader(
+            title: headerDict["title"] as? String ?? "FIRE HAZARD INSPECTION REPORT",
+            company: headerDict["company"] as? String ?? "Smeba Fire Safety | Moyne Roberts",
+            location: headerDict["location"] as? String ?? "Unknown",
+            date: headerDict["date"] as? String ?? "",
+            riskLevel: headerDict["risk_level"] as? String ?? "Unknown"
+        )
+
+        // Parse summary
+        let summary = result["summary"] as? String ?? "Analysis completed"
+
+        // Parse safety compliance
+        var safetyCompliance: [OrqComplianceItem] = []
+        if let complianceDict = result["safety_compliance"] as? [String: [String: Any]] {
+            for (key, value) in complianceDict {
+                let status = value["status"] as? Bool ?? false
+                let label = value["label"] as? String ?? key
+                safetyCompliance.append(OrqComplianceItem(key: key, label: label, status: status))
+            }
+        }
+
+        // Parse identified hazards
+        var identifiedHazards: [OrqHazard] = []
+        if let hazardsArray = result["identified_hazards"] as? [[String: Any]] {
+            for hazard in hazardsArray {
+                identifiedHazards.append(OrqHazard(
+                    title: hazard["title"] as? String ?? "Unknown Hazard",
+                    riskLevel: hazard["risk_level"] as? String ?? "Unknown",
+                    description: hazard["description"] as? String ?? "",
+                    recommendedAction: hazard["recommended_action"] as? String ?? ""
+                ))
+            }
+        }
+
+        // Parse recommendations
+        let recommendations = result["recommendations"] as? [String] ?? []
+
+        // Parse footer
+        let footerDict = result["footer"] as? [String: Any] ?? [:]
+        let footer = OrqFooter(
+            generatedBy: footerDict["generated_by"] as? String ?? "MR Smart Glasses App",
+            analyzedBy: footerDict["analyzed_by"] as? String ?? "Claude AI",
+            links: footerDict["links"] as? [String] ?? []
+        )
+
         return OrqResponse(
-            riskLevel: result["risk_level"] as? String ?? "unknown",
-            summary: result["summary"] as? String ?? "Analysis completed",
-            hazards: result["hazards"] as? [String] ?? [],
-            recommendations: result["recommendations"] as? [String] ?? [],
-            complianceItems: parseComplianceItems(result["compliance"])
+            header: header,
+            summary: summary,
+            safetyCompliance: safetyCompliance,
+            identifiedHazards: identifiedHazards,
+            recommendations: recommendations,
+            footer: footer
         )
     }
 
-    private func parseComplianceItems(_ compliance: Any?) -> [OrqComplianceItem] {
-        guard let items = compliance as? [[String: Any]] else { return [] }
-        return items.compactMap { item in
-            guard let name = item["item"] as? String,
-                  let status = item["status"] as? Bool else { return nil }
-            return OrqComplianceItem(item: name, status: status)
-        }
-    }
-
     private func performLocalAnalysis(_ image: UIImage, error: String? = nil) -> AnalysisResult {
-        // Fallback local analysis when API is unavailable
-        let errorInfo = error ?? "Onbekende fout"
+        let errorInfo = error ?? "Unknown error"
         return AnalysisResult(
-            riskLevel: "unknown",
-            summary: "⚠️ API Fout: \(errorInfo)\n\nControleer handmatig op brandveiligheid.",
-            hazards: ["API niet beschikbaar - handmatige inspectie vereist"],
+            header: AnalysisResult.Header(
+                title: "FIRE HAZARD INSPECTION REPORT",
+                company: "Smeba Fire Safety | Moyne Roberts",
+                location: "Unknown",
+                date: "",
+                riskLevel: "Unknown"
+            ),
+            summary: "⚠️ API Error: \(errorInfo)\n\nManual inspection required.",
+            safetyCompliance: [
+                AnalysisResult.ComplianceItem(key: "api_config", label: "API Configuration", status: false),
+                AnalysisResult.ComplianceItem(key: "manual_check", label: "Manual Check Required", status: false)
+            ],
+            identifiedHazards: [
+                AnalysisResult.Hazard(
+                    title: "API Not Available",
+                    riskLevel: "Unknown",
+                    description: "Could not connect to analysis service.",
+                    recommendedAction: "Check API configuration and internet connection."
+                )
+            ],
             recommendations: [
-                "Configureer je Orq.ai API key in Info.plist",
-                "Controleer of je deployment ID correct is",
-                "Controleer je internetverbinding",
-                "Zie Xcode console voor debug info"
+                "Configure your Orq.ai API key in Info.plist",
+                "Verify the deployment key is correct",
+                "Check your internet connection",
+                "See Xcode console for debug info"
             ],
-            complianceItems: [
-                AnalysisResult.ComplianceItem(item: "API configuratie", status: false),
-                AnalysisResult.ComplianceItem(item: "Handmatige controle vereist", status: false)
-            ],
+            footer: AnalysisResult.Footer(
+                generatedBy: "MR Smart Glasses App",
+                analyzedBy: "Local Fallback",
+                links: ["www.smeba.nl", "www.moyneroberts.ie"]
+            ),
             timestamp: Date(),
             photo: image
         )
@@ -245,16 +333,39 @@ class FireHazardAnalysisService: ObservableObject {
 // MARK: - Response Models
 
 private struct OrqResponse {
-    let riskLevel: String
+    let header: OrqHeader
     let summary: String
-    let hazards: [String]
+    let safetyCompliance: [OrqComplianceItem]
+    let identifiedHazards: [OrqHazard]
     let recommendations: [String]
-    let complianceItems: [OrqComplianceItem]
+    let footer: OrqFooter
+}
+
+private struct OrqHeader {
+    let title: String
+    let company: String
+    let location: String
+    let date: String
+    let riskLevel: String
 }
 
 private struct OrqComplianceItem {
-    let item: String
+    let key: String
+    let label: String
     let status: Bool
+}
+
+private struct OrqHazard {
+    let title: String
+    let riskLevel: String
+    let description: String
+    let recommendedAction: String
+}
+
+private struct OrqFooter {
+    let generatedBy: String
+    let analyzedBy: String
+    let links: [String]
 }
 
 // MARK: - Errors
@@ -269,15 +380,15 @@ enum AnalysisError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .imageConversionFailed:
-            return "Kon foto niet verwerken"
+            return "Could not process image"
         case .missingAPIKey:
-            return "API key niet geconfigureerd"
+            return "API key not configured"
         case .apiError:
-            return "Fout bij communicatie met analyse service"
+            return "Error communicating with analysis service"
         case .httpError(let statusCode, let message):
             return "HTTP \(statusCode): \(message.prefix(200))"
         case .parseError:
-            return "Kon analyse resultaat niet verwerken"
+            return "Could not parse analysis result"
         }
     }
 }

@@ -17,6 +17,9 @@ struct AnalysisResultView: View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
+                    // Header Card
+                    headerCard
+
                     // Photo thumbnail
                     photoSection
 
@@ -26,14 +29,14 @@ struct AnalysisResultView: View {
                     // Summary Card
                     summaryCard
 
-                    // Hazards Card
-                    if !result.hazards.isEmpty {
-                        hazardsCard
+                    // Safety Compliance Card
+                    if !result.safetyCompliance.isEmpty {
+                        complianceCard
                     }
 
-                    // Compliance Checklist
-                    if !result.complianceItems.isEmpty {
-                        complianceCard
+                    // Identified Hazards
+                    if !result.identifiedHazards.isEmpty {
+                        hazardsSection
                     }
 
                     // Recommendations Card
@@ -41,17 +44,20 @@ struct AnalysisResultView: View {
                         recommendationsCard
                     }
 
+                    // Footer Card
+                    footerCard
+
                     // Action Buttons
                     actionButtons
                 }
                 .padding()
             }
             .background(Color.mrBackground)
-            .navigationTitle("Analyse Resultaat")
+            .navigationTitle("Analysis Result")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Sluiten") {
+                    Button("Close") {
                         onDismiss()
                     }
                     .foregroundColor(.mrPrimary)
@@ -67,6 +73,38 @@ struct AnalysisResultView: View {
         .sheet(isPresented: $showShareSheet) {
             ShareSheet(photo: result.photo)
         }
+    }
+
+    // MARK: - Header Card
+
+    private var headerCard: some View {
+        VStack(spacing: 8) {
+            Text(result.header.title)
+                .font(.system(size: 18, weight: .bold))
+                .foregroundColor(.mrPrimary)
+                .multilineTextAlignment(.center)
+
+            Text(result.header.company)
+                .font(.system(size: 14, weight: .medium))
+                .foregroundColor(.mrTextSecondary)
+
+            HStack(spacing: 16) {
+                if !result.header.location.isEmpty && result.header.location != "Unknown" {
+                    Label(result.header.location, systemImage: "location.fill")
+                        .font(.caption)
+                        .foregroundColor(.mrTextSecondary)
+                }
+                if !result.header.date.isEmpty {
+                    Label(result.header.date, systemImage: "calendar")
+                        .font(.caption)
+                        .foregroundColor(.mrTextSecondary)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(Color.mrPrimary.opacity(0.1))
+        .cornerRadius(12)
     }
 
     // MARK: - Photo Section
@@ -105,17 +143,17 @@ struct AnalysisResultView: View {
                     .foregroundColor(riskColor)
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Risico Niveau")
+                    Text("Risk Level")
                         .font(.subheadline)
                         .foregroundColor(.mrTextSecondary)
-                    Text(riskLevelText)
+                    Text(result.header.riskLevel.uppercased())
                         .font(.title2.bold())
                         .foregroundColor(riskColor)
                 }
 
                 Spacer()
 
-                RiskLevelBadge(level: result.riskLevel)
+                RiskLevelBadge(level: result.header.riskLevel)
             }
         }
         .padding()
@@ -123,7 +161,7 @@ struct AnalysisResultView: View {
     }
 
     private var riskIcon: String {
-        switch result.riskLevel.lowercased() {
+        switch result.header.riskLevel.lowercased() {
         case "low": return "checkmark.shield.fill"
         case "medium": return "exclamationmark.triangle.fill"
         case "high": return "flame.fill"
@@ -133,7 +171,7 @@ struct AnalysisResultView: View {
     }
 
     private var riskColor: Color {
-        switch result.riskLevel.lowercased() {
+        switch result.header.riskLevel.lowercased() {
         case "low": return .mrRiskLow
         case "medium": return .mrRiskMedium
         case "high": return .mrRiskHigh
@@ -142,21 +180,11 @@ struct AnalysisResultView: View {
         }
     }
 
-    private var riskLevelText: String {
-        switch result.riskLevel.lowercased() {
-        case "low": return "Laag Risico"
-        case "medium": return "Gemiddeld Risico"
-        case "high": return "Hoog Risico"
-        case "critical": return "Kritiek Risico"
-        default: return "Onbekend"
-        }
-    }
-
     // MARK: - Summary Card
 
     private var summaryCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Label("Samenvatting", systemImage: "doc.text.fill")
+            Label("Summary", systemImage: "doc.text.fill")
                 .font(.headline)
                 .foregroundColor(.mrTextPrimary)
 
@@ -170,46 +198,20 @@ struct AnalysisResultView: View {
         .mrCardStyle()
     }
 
-    // MARK: - Hazards Card
-
-    private var hazardsCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Label("Geïdentificeerde Gevaren", systemImage: "exclamationmark.triangle.fill")
-                .font(.headline)
-                .foregroundColor(.mrSecondary)
-
-            ForEach(result.hazards, id: \.self) { hazard in
-                HStack(alignment: .top, spacing: 12) {
-                    Image(systemName: "flame.fill")
-                        .foregroundColor(.mrSecondary)
-                        .frame(width: 20)
-                    Text(hazard)
-                        .font(.body)
-                        .foregroundColor(.mrTextPrimary)
-                    Spacer()
-                }
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(Color.mrSecondary.opacity(0.1))
-        .cornerRadius(16)
-    }
-
     // MARK: - Compliance Card
 
     private var complianceCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Label("Compliance Checklist", systemImage: "checklist")
+            Label("Safety Compliance", systemImage: "checklist")
                 .font(.headline)
                 .foregroundColor(.mrTextPrimary)
 
-            ForEach(result.complianceItems) { item in
+            ForEach(result.safetyCompliance) { item in
                 HStack(spacing: 12) {
                     Image(systemName: item.status ? "checkmark.circle.fill" : "xmark.circle.fill")
                         .foregroundColor(item.status ? .mrRiskLow : .mrSecondary)
                         .frame(width: 20)
-                    Text(item.item)
+                    Text(item.label)
                         .font(.body)
                         .foregroundColor(.mrTextPrimary)
                     Spacer()
@@ -221,11 +223,57 @@ struct AnalysisResultView: View {
         .mrCardStyle()
     }
 
+    // MARK: - Hazards Section
+
+    private var hazardsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Label("Identified Hazards", systemImage: "exclamationmark.triangle.fill")
+                .font(.headline)
+                .foregroundColor(.mrSecondary)
+
+            ForEach(result.identifiedHazards) { hazard in
+                hazardCard(hazard)
+            }
+        }
+    }
+
+    private func hazardCard(_ hazard: AnalysisResult.Hazard) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text(hazard.title)
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.mrTextPrimary)
+                Spacer()
+                RiskLevelBadge(level: hazard.riskLevel)
+            }
+
+            Text(hazard.description)
+                .font(.body)
+                .foregroundColor(.mrTextSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            if !hazard.recommendedAction.isEmpty {
+                Divider()
+                HStack(alignment: .top, spacing: 8) {
+                    Image(systemName: "lightbulb.fill")
+                        .foregroundColor(.mrAccent)
+                        .frame(width: 20)
+                    Text(hazard.recommendedAction)
+                        .font(.callout)
+                        .foregroundColor(.mrTextPrimary)
+                }
+            }
+        }
+        .padding()
+        .background(Color.mrSecondary.opacity(0.1))
+        .cornerRadius(12)
+    }
+
     // MARK: - Recommendations Card
 
     private var recommendationsCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Label("Aanbevelingen", systemImage: "lightbulb.fill")
+            Label("Recommendations", systemImage: "lightbulb.fill")
                 .font(.headline)
                 .foregroundColor(.mrAccent)
 
@@ -248,20 +296,78 @@ struct AnalysisResultView: View {
         .cornerRadius(16)
     }
 
+    // MARK: - Footer Card
+
+    private var footerCard: some View {
+        VStack(spacing: 8) {
+            HStack {
+                Text("Generated by:")
+                    .font(.caption)
+                    .foregroundColor(.mrTextSecondary)
+                Text(result.footer.generatedBy)
+                    .font(.caption.bold())
+                    .foregroundColor(.mrTextPrimary)
+            }
+            HStack {
+                Text("Analyzed by:")
+                    .font(.caption)
+                    .foregroundColor(.mrTextSecondary)
+                Text(result.footer.analyzedBy)
+                    .font(.caption.bold())
+                    .foregroundColor(.mrTextPrimary)
+            }
+            if !result.footer.links.isEmpty {
+                HStack(spacing: 12) {
+                    ForEach(result.footer.links, id: \.self) { link in
+                        Text(link)
+                            .font(.caption)
+                            .foregroundColor(.mrPrimary)
+                    }
+                }
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(Color.mrBackground)
+        .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.mrTextSecondary.opacity(0.2), lineWidth: 1)
+        )
+    }
+
     // MARK: - Action Buttons
 
     private var actionButtons: some View {
         VStack(spacing: 12) {
             Button(action: onNewScan) {
-                Label("Nieuwe Scan", systemImage: "camera.fill")
+                Label("New Scan", systemImage: "camera.fill")
             }
             .buttonStyle(MRPrimaryButtonStyle())
 
             Button(action: { showShareSheet = true }) {
-                Label("Deel Rapport", systemImage: "square.and.arrow.up")
+                Label("Share Report", systemImage: "square.and.arrow.up")
             }
             .buttonStyle(MRSecondaryButtonStyle())
         }
         .padding(.top, 8)
     }
+}
+
+struct ShareSheet: UIViewControllerRepresentable {
+    let photo: UIImage
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let activityViewController = UIActivityViewController(
+            activityItems: [photo],
+            applicationActivities: nil
+        )
+        activityViewController.excludedActivityTypes = [
+            .assignToContact,
+            .addToReadingList,
+        ]
+        return activityViewController
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
