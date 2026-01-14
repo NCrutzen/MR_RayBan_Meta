@@ -1,82 +1,49 @@
-# MR_RayBan_Meta
+# Camera Access App
 
-Developing Moyne Roberts applications for the Ray-Ban Meta Wayfarer Gen 2 glasses with iPhone 14 Pro integration.
+A sample iOS application demonstrating integration with Meta Wearables Device Access Toolkit. This app showcases streaming video from Meta AI glasses, capturing photos, and managing connection states.
 
-## Overview
+## Features
 
-This repository contains proof of concept implementations for the Ray-Ban Meta smart glasses platform. The POCs demonstrate various capabilities including voice control, camera integration, AI vision, and live streaming.
-
-## Ray-Ban Meta Wayfarer Gen 2 Specifications
-
-| Feature | Specification |
-|---------|---------------|
-| Camera | 12MP Ultra-wide camera |
-| Video | 1080p @ 30fps, 720p @ 30fps |
-| Audio | 5-microphone array, open-ear speakers |
-| Storage | 32GB internal |
-| Battery | Up to 4 hours continuous use |
-| Connectivity | Bluetooth 5.2, WiFi |
-| AI Assistant | Meta AI built-in |
-
-## Project Structure
-
-```
-MR_RayBan_Meta/
-├── docs/                          # Documentation
-│   ├── CAPABILITIES.md            # Glasses capabilities reference
-│   ├── IPHONE_SETUP.md            # iPhone 14 Pro setup guide
-│   └── API_REFERENCE.md           # API and integration reference
-├── ios-companion-app/             # iOS companion app (Swift/SwiftUI)
-│   └── RayBanMetaCompanion/       # Xcode project
-├── pocs/                          # Proof of Concept implementations
-│   ├── voice-assistant/           # Voice command POC
-│   ├── photo-capture/             # Photo capture & processing POC
-│   ├── live-stream/               # Live streaming POC
-│   └── ai-vision/                 # AI vision & object detection POC
-├── scripts/                       # Utility scripts
-└── assets/                        # Shared assets
-```
+- Connect to Meta AI glasses
+- Stream camera feed from the device
+- Capture photos from glasses
+- Timer-based streaming sessions
+- Share captured photos
 
 ## Prerequisites
 
-### Hardware
-- Ray-Ban Meta Wayfarer Gen 2 glasses
-- iPhone 14 Pro (iOS 16.0+)
-- Mac with Xcode 15+ (for iOS development)
+- iOS 17.0+
+- Xcode 14.0+
+- Swift 5.0+
+- Meta Wearables Device Access Toolkit (included as a dependency)
+- A Meta AI glasses device for testing (optional for development)
 
-### Software
-- Meta View app (App Store)
-- WhatsApp (optional, for messaging features)
-- Facebook/Instagram app (for live streaming)
+## Building the app
 
-## Quick Start
+### Using Xcode
 
-1. **Pair your glasses**: Download Meta View app and follow pairing instructions
-2. **Clone this repository**: `git clone <repo-url>`
-3. **Open iOS project**: Open `ios-companion-app/RayBanMetaCompanion.xcodeproj` in Xcode
-4. **Run on device**: Build and run on your iPhone 14 Pro
+1. Clone this repository
+1. Open the project in Xcode
+1. Select your target device
+1. Click the "Build" button or press `Cmd+B` to build the project
+1. To run the app, click the "Run" button (▶️) or press `Cmd+R`
 
-## POC Descriptions
+## Running the app
 
-### 1. Voice Assistant POC
-Demonstrates voice command integration using "Hey Meta" wake word and custom voice actions.
+1. Turn 'Developer Mode' on in the Meta AI app.
+1. Launch the app.
+1. Press the "Connect" button to complete app registration.
+1. Once connected, the camera stream from the device will be displayed
+1. Use the on-screen controls to:
+   - Set stream time limits
+   - Capture photos
+   - View and save captured photos
+   - Disconnect from the device
 
-### 2. Photo Capture POC
-Shows camera integration for capturing photos, processing them on iPhone, and triggering actions.
+## Troubleshooting
 
-### 3. Live Stream POC
-Implements live streaming workflows to Facebook/Instagram with companion app control.
-
-### 4. AI Vision POC
-Explores Meta AI vision capabilities for object recognition and scene understanding.
-
-## Development Notes
-
-- The Ray-Ban Meta glasses communicate with iPhone via Bluetooth
-- Media is synced through the Meta View app
-- Custom integrations require building companion apps that work alongside Meta View
-- Voice commands use "Hey Meta" wake word
+For issues related to the Meta Wearables Device Access Toolkit, please refer to the [developer documentation](https://wearables.developer.meta.com/docs/develop/) or visit our [discussions forum](https://github.com/facebook/meta-wearables-dat-ios/discussions)
 
 ## License
 
-Proprietary - Moyne Roberts © 2024
+This source code is licensed under the license found in the LICENSE file in the root directory of this source tree.
